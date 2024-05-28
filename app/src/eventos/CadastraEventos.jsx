@@ -1,5 +1,5 @@
 import React from 'react'
-import {FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button} from "@mui/material"
+import {FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem} from "@mui/material"
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -10,6 +10,11 @@ export function CadastraEvento () {
     const paperStyle = {padding:'30px 20px', width:"100%"}
     const gridStyle = {margin:'10px'}
     const formStyle = {margin:'10px'}
+    const [tipo, setTipo] = React.useState('');
+    const handleChange = (event) => {
+        setTipo(event.target.value);
+    };
+
     return (
         <Grid>
             <Paper elevation={20} style={paperStyle}>
@@ -30,6 +35,21 @@ export function CadastraEvento () {
                         </LocalizationProvider>
                     </Grid>
                     <TextField fullWidth label='Endereço' style={formStyle}/>
+                    <FormControl fullWidth>
+                        <InputLabel>Tipo</InputLabel>
+                        <Select
+                            value={tipo}
+                            onChange={handleChange}
+                            label="Tipo"
+                        >
+                            <MenuItem value={'festa'}>Festa</MenuItem>
+                            <MenuItem value={'cultural'}>Cultural</MenuItem>
+                            <MenuItem value={'esportivo'}>Esportivo</MenuItem>
+                            <MenuItem value={'religioso'}>Religioso</MenuItem>
+                            <MenuItem value={'educacional'}>Educacional</MenuItem>
+                            <MenuItem value={'academico'}>Acadêmico</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField fullWidth label='Preço' style={formStyle} InputProps={
                         {endAdornment: <InputAdornment position="start">R$</InputAdornment>}
                     }/>
