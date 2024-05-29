@@ -51,13 +51,18 @@ export function CadastraEvento () {
         </Fragment>
       );
 
+    const formatDateToString = (date) => {
+        if (!date) return '';
+        return date.format('DD/MM/YYYY'); // Formato para português do Brasil
+    };
+
     function click() {
         let data = {
             "nome": nome,
             "organizador": organizador,
-            "data": dataEvento,
+            "data": formatDateToString(dataEvento),
             "tipo": tipo,
-            "endereco": endereco,
+            "local": endereco,
             "preco": preco,
             "descricao": descricao,
             "faixaEtaria": faixaEtaria
@@ -97,14 +102,18 @@ export function CadastraEvento () {
                         alignItems: "center",
                         height: "100%",
                         flexDirection:'column',            }}>
-                        <TextField fullWidth label='Nome do evento' style={formStyle} value={nome} set={setNome}/>
-                        <TextField fullWidth label='Organizador' style={formStyle} value={organizador} set={setOrganizador}/>
+                        <TextField fullWidth label='Nome do evento' style={formStyle} value={nome} onChange={(event) => {
+                            setNome(event.target.value);}}/>
+                        <TextField fullWidth label='Organizador' style={formStyle} value={organizador} onChange={(event) => {
+                            setOrganizador(event.target.value);}}/>
                         <Grid style={formStyle}>
                             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
                                 <DatePicker label="Data" slotProps={{ textField: { fullWidth: true}}} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)}/>
                             </LocalizationProvider>
                         </Grid>
-                        <TextField fullWidth label='Endereço' style={formStyle} value={endereco} set={setEndereco}/>
+                        
+                        <TextField fullWidth label='Endereço' style={formStyle} value={endereco} onChange={(event) => {
+                            setEndereco(event.target.value);}}/>
                         <FormControl fullWidth>
                             <InputLabel>Tipo</InputLabel>
                             <Select
@@ -122,9 +131,12 @@ export function CadastraEvento () {
                         </FormControl>
                         <TextField fullWidth label='Preço' style={formStyle} InputProps={
                             {endAdornment: <InputAdornment position="start">R$</InputAdornment>}
-                        } value={preco} set={setPreco} />
-                        <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5} value={descricao} set={setDescricao} />
-                        <TextField fullWidth label='Faixa etária' style={formStyle} value={faixaEtaria} set={setFaixaEtaria} />
+                        } value={preco} onChange={(event) => {
+                            setPreco(event.target.value);}}/>
+                        <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5} value={descricao} onChange={(event) => {
+                            setDescricao(event.target.value);}}/>
+                        <TextField fullWidth label='Faixa etária' style={formStyle} value={faixaEtaria} onChange={(event) => {
+                            setFaixaEtaria(event.target.value);}}/>
                         <Button variant='contained' endIcon={<SaveIcon />} onClick={() => click()}>Cadastrar</Button>
                     </form>
                 </Paper>
