@@ -1,5 +1,5 @@
-import React from 'react'
-import {FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem} from "@mui/material"
+import React, { Fragment, useState } from 'react'
+import {FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar} from "@mui/material"
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -10,54 +10,133 @@ export function CadastraEvento () {
     const paperStyle = {padding:'30px 20px', width:"100%"}
     const gridStyle = {margin:'10px'}
     const formStyle = {margin:'10px'}
-    const [tipo, setTipo] = React.useState('');
+    
     const handleChange = (event) => {
         setTipo(event.target.value);
     };
 
+    const [nome, setNome] = React.useState();
+    const [organizador, setOrganizador] = React.useState();
+    const [dataEvento, setDataEvento] = React.useState();
+    const [tipo, setTipo] = React.useState('');
+    const [endereco, setEndereco] = React.useState();
+    const [preco, setPreco] = React.useState();
+    const [descricao, setDescricao] = React.useState();
+    const [faixaEtaria, setFaixaEtaria] = React.useState();
+
+    const [open, setOpen] = useState(false)
+
+    const [message, setMessage] = useState()
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+    };
+
+    const action = (
+        <Fragment>
+          <Button color="secondary" size="small" onClick={handleClose}>
+            UNDO
+          </Button>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+          </IconButton>
+        </Fragment>
+      );
+
+    function click() {
+        let data = {
+            "nome": nome,
+            "organizador": organizador,
+            "data": dataEvento,
+            "tipo": tipo,
+            "endereco": endereco,
+            "preco": preco,
+            "descricao": descricao,
+            "faixaEtaria": faixaEtaria
+        }
+    
+        fetch('http://localhost:8080/evento', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(response => {
+            if (!response.ok) {
+                // error processing
+                throw 'Error';
+            }
+          setOpen(true)
+          setMessage("Evento cadastrado com sucesso!")
+          //load()
+        }).catch(response => {
+            setOpen(true)
+            setMessage('Erro no cadastro do evento!')
+        })
+    }
+
+
     return (
-        <Grid>
-            <Paper elevation={20} style={paperStyle}>
-                <Grid style={gridStyle}>
-                    <h2>Novo evento</h2>
-                    <Typography variant='caption'>Preencha esse formulário para cadastrar um novo evento</Typography>
-                </Grid>
-                <form action="" style={{
-                    display: "flex",
-                    alignItems: "center",
-                    height: "100%",
-                    flexDirection:'column',            }}>
-                    <TextField fullWidth label='Nome do evento' style={formStyle}/>
-                    <TextField fullWidth label='Organizador' style={formStyle}/>
-                    <Grid style={formStyle}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                            <DatePicker label="Data" slotProps={{ textField: { fullWidth: true}}}/>
-                        </LocalizationProvider>
+        <>
+            <Grid>
+                <Paper elevation={20} style={paperStyle}>
+                    <Grid style={gridStyle}>
+                        <h2>Novo evento</h2>
+                        <Typography>Preencha esse formulário para cadastrar um novo evento</Typography>
                     </Grid>
-                    <TextField fullWidth label='Endereço' style={formStyle}/>
-                    <FormControl fullWidth>
-                        <InputLabel>Tipo</InputLabel>
-                        <Select
-                            value={tipo}
-                            onChange={handleChange}
-                            label="Tipo"
-                        >
-                            <MenuItem value={'festa'}>Festa</MenuItem>
-                            <MenuItem value={'cultural'}>Cultural</MenuItem>
-                            <MenuItem value={'esportivo'}>Esportivo</MenuItem>
-                            <MenuItem value={'religioso'}>Religioso</MenuItem>
-                            <MenuItem value={'educacional'}>Educacional</MenuItem>
-                            <MenuItem value={'academico'}>Acadêmico</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <TextField fullWidth label='Preço' style={formStyle} InputProps={
-                        {endAdornment: <InputAdornment position="start">R$</InputAdornment>}
-                    }/>
-                    <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5}/>
-                    <TextField fullWidth label='Faixa etária' style={formStyle}/>
-                    <Button variant='contained' endIcon={<SaveIcon />}>Cadastrar</Button>
-                </form>
-            </Paper>
-        </Grid>
+                    <form action="" style={{
+                        display: "flex",
+                        alignItems: "center",
+                        height: "100%",
+                        flexDirection:'column',            }}>
+                        <TextField fullWidth label='Nome do evento' style={formStyle} value={nome} set={setNome}/>
+                        <TextField fullWidth label='Organizador' style={formStyle} value={organizador} set={setOrganizador}/>
+                        <Grid style={formStyle}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
+                                <DatePicker label="Data" slotProps={{ textField: { fullWidth: true}}} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)}/>
+                            </LocalizationProvider>
+                        </Grid>
+                        <TextField fullWidth label='Endereço' style={formStyle} value={endereco} set={setEndereco}/>
+                        <FormControl fullWidth>
+                            <InputLabel>Tipo</InputLabel>
+                            <Select
+                                value={tipo}
+                                onChange={handleChange}
+                                label="Tipo"
+                            >
+                                <MenuItem value={'festa'}>Festa</MenuItem>
+                                <MenuItem value={'cultural'}>Cultural</MenuItem>
+                                <MenuItem value={'esportivo'}>Esportivo</MenuItem>
+                                <MenuItem value={'religioso'}>Religioso</MenuItem>
+                                <MenuItem value={'educacional'}>Educacional</MenuItem>
+                                <MenuItem value={'academico'}>Acadêmico</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField fullWidth label='Preço' style={formStyle} InputProps={
+                            {endAdornment: <InputAdornment position="start">R$</InputAdornment>}
+                        } value={preco} set={setPreco} />
+                        <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5} value={descricao} set={setDescricao} />
+                        <TextField fullWidth label='Faixa etária' style={formStyle} value={faixaEtaria} set={setFaixaEtaria} />
+                        <Button variant='contained' endIcon={<SaveIcon />} onClick={() => click()}>Cadastrar</Button>
+                    </form>
+                </Paper>
+                
+            </Grid>
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message={message}
+                action={action}
+            ></Snackbar>
+        </>
     )
 }
