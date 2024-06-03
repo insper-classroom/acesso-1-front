@@ -91,11 +91,9 @@ export function CadastraEvento () {
 
     return (
         <>
-            <Grid>
-                <Paper elevation={20} style={paperStyle}>
                     <Grid style={gridStyle}>
-                        <h2>Novo evento</h2>
-                        <Typography>Preencha esse formulário para cadastrar um novo evento</Typography>
+                        <h2 style={{color: 'black', textAlign:'center', margin: '20px'}}>Novo evento</h2>
+                        <Typography color={'black'}>Preencha esse formulário para cadastrar um novo evento</Typography>
                     </Grid>
                     <form action="" style={{
                         display: "flex",
@@ -120,6 +118,7 @@ export function CadastraEvento () {
                                 value={tipo}
                                 onChange={handleChange}
                                 label="Tipo"
+                                
                             >
                                 <MenuItem value={'festa'}>Festa</MenuItem>
                                 <MenuItem value={'cultural'}>Cultural</MenuItem>
@@ -137,11 +136,10 @@ export function CadastraEvento () {
                             setDescricao(event.target.value);}}/>
                         <TextField fullWidth label='Faixa etária' style={formStyle} value={faixaEtaria} onChange={(event) => {
                             setFaixaEtaria(event.target.value);}}/>
-                        <Button variant='contained' endIcon={<SaveIcon />} onClick={() => click()}>Cadastrar</Button>
+                        <Button variant='contained' endIcon={<SaveIcon />} onClick={() => click(0)}>Cadastrar</Button>
                     </form>
-                </Paper>
                 
-            </Grid>
+
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
