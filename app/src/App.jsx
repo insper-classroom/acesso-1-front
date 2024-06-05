@@ -5,7 +5,9 @@ import './App.css'
 import { CadastraEvento } from './eventos/CadastraEventos'
 import { ListaEventos } from './eventos/ListaEventos'
 import { EditaEventos } from './eventos/EditaEventos'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { CadastraUser } from './usario/CadastraUsers'
+import { SignUp } from './usario/LinkCadastro'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { Home } from './homepage'
 import { NavBar } from './common/navbar'
 
@@ -20,6 +22,8 @@ function App() {
         <NavBar />
         <div className="App">
           <Routes>
+            <Route path="/linkcadastro" element={<SignUp />} />
+            <Route path="/cadastrausuarios/:token" element={<CadastraUser />} />
             <Route path="/eventos" element={<ListaEventos />} />
             <Route path="/cadastraeventos" element={<CadastraEvento />} />
             <Route path="/editaeventos/:id" element={<EditaEventos />} />
