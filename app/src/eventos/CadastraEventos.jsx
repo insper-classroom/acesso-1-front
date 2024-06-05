@@ -96,7 +96,7 @@ export function CadastraEvento () {
             setOpen(true)
             setMessage('Erro no cadastro do evento!')
         }).finally(() => {
-            navigate('/');
+            navigate('/eventos');
         });
     }
 
