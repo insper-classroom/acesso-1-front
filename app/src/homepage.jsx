@@ -37,6 +37,16 @@ export function Home() {
                     Novo Evento
                 </Button>
             </Grid>
+            <Grid item>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate(`/linkcadastro`)}
+                    style={{ width: '200px' }} // Definindo o mesmo tamanho para ambos os botões
+                >
+                    Gera Link Cadastro
+                </Button>
+            </Grid>
         </Grid>
     );
 }
