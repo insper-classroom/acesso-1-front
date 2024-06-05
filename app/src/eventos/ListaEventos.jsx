@@ -9,6 +9,9 @@ import 'dayjs/locale/pt-br';
 import { DataGrid } from '@mui/x-data-grid';
 import { EditaEventos } from './EditaEventos';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+
 
 export function ListaEventos() {
     const navigate = useNavigate();
@@ -87,7 +90,17 @@ export function ListaEventos() {
     ];
 
     return (
+        <>
+        <IconButton onClick={() => navigate('/')} sx={{
+                        '&:hover': {
+                            color: 'primary.main'
+                        }
+                    }}>
+                    <ArrowBackIcon />
+            </IconButton>
+        
         <Grid container style={{ height: '100vh', width: '100%' }}>
+            
             <Typography align='center' variant="h4" style={{ margin: '10px', color: 'black' }}>Meus eventos</Typography>
             <Grid item xs={12} style={{ height: '100%' }}>
                 <div style={{ height: '100%', width: '100%' }}>
@@ -121,5 +134,6 @@ export function ListaEventos() {
                 message={message}
             />
         </Grid>
+        </>
     );
 }

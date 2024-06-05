@@ -96,6 +96,7 @@ export function EditaEventos() {
     const [preco, setPreco] = useState('');
     const [descricao, setDescricao] = useState('');
     const [faixaEtaria, setFaixaEtaria] = useState('');
+    const [foto, setFoto] = useState(null);
     const navigate = useNavigate();
 
     const predefinedRegions = ['Heliópolis', 'Ipiranga', 'Sacomã', 'Cursino', 'Outro'];
@@ -109,7 +110,9 @@ export function EditaEventos() {
             "regiao": regiao,
             "preco": preco,
             "descricao": descricao,
-            "faixaEtaria": faixaEtaria
+            "faixaEtaria": faixaEtaria,
+            "organizador": organizador,
+            "foto": foto
         }
 
         fetch(`http://localhost:8080/evento/${id}`, {
@@ -129,7 +132,7 @@ export function EditaEventos() {
             setOpen(true);
             setMessage('Erro na edição do evento!');
         }).finally(() => {
-            navigate('/');
+            navigate('/eventos');
         });
     }
 

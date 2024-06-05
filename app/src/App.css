@@ -18,5 +18,8 @@ html, body {
 }
 
 body {
-  padding: 10%;
+}
+
+.App {
+  padding: 5% 10% 5% 10%;
 }
