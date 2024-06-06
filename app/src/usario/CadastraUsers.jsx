@@ -62,16 +62,14 @@ export function CadastraUser() {
             if (!response.ok) {
                 // error processing
                 throw 'Error';
-            }
+            } return response.text();
+        }).then(data => {
+            setMessage(data)
             setOpen(true)
-            setMessage("Usuário cadastrado com sucesso!")
-            //load()
         }).catch(response => {
+            setMessage(response.text())
             setOpen(true)
-            setMessage('Erro no cadastro do usuário!')
-        }).finally(() => {
-            navigate('/');
-        });
+        }); 
     }
 
     return (
