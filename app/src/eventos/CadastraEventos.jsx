@@ -136,7 +136,7 @@ export function CadastraEvento() {
     const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
 
     return (
-        <>
+        <div style={{padding: "5%"}}>
             <IconButton onClick={() => navigate('/')} sx={{
                 '&:hover': {
                     color: 'primary.main'
@@ -235,6 +235,6 @@ export function CadastraEvento() {
                 message={message}
                 action={action}
             ></Snackbar>
-        </>
+        </div>
     );
 }

@@ -10,7 +10,20 @@ import { DataGrid } from '@mui/x-data-grid';
 import { EditaEventos } from './EditaEventos';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { NavBar } from '../common/navbar'
 
+const Container = styled(Grid)(({ theme }) => ({
+    minHeight: '100%', // Ensure the container takes the full viewport height
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    padding: theme.spacing(4),
+    textAlign: 'center',
+    margin: 0,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column', // Align items in column direction
+  }));
 
 
 export function ListaEventos() {
@@ -58,14 +71,6 @@ export function ListaEventos() {
     const colunas = [
         { field: 'nome', headerName: 'Nome', flex: 1, minWidth: 100 },
         { field: 'data', headerName: 'Data', flex: 1, minWidth: 100 },
-        { field: 'horario', headerName: 'Horário', flex: 1, minWidth: 100 },
-        { field: 'tipo', headerName: 'Tipo', flex: 1, minWidth: 100, type: 'singleSelect', valueOptions: ['Tipo 1', 'Tipo 2', 'Tipo 3'] },
-        { field: 'endereco', headerName: 'Endereco', flex: 1, minWidth: 100 },
-        { field: 'regiao', headerName: 'Regiao', flex: 1, minWidth: 100 },
-        { field: 'preco', headerName: 'Preço', flex: 1, minWidth: 100 },
-        { field: 'descricao', headerName: 'Descrição', flex: 2, minWidth: 150 },
-        { field: 'telefone', headerName: 'Telefone', flex: 1, minWidth: 100 },
-        { field: 'link', headerName: 'Link', flex: 1, minWidth: 100 },
         {
             field: 'editar',
             headerName: 'Editar',
@@ -92,49 +97,53 @@ export function ListaEventos() {
 
     return (
         <>
-        <IconButton onClick={() => navigate('/')} sx={{
-                        '&:hover': {
-                            color: 'primary.main'
-                        }
-                    }}>
-                    <ArrowBackIcon />
-            </IconButton>
-        
-        <Grid container style={{ height: '100vh', width: '100%' }}>
+        <NavBar></NavBar>
+        <div style={{padding: "5%"}}>
+            <IconButton onClick={() => navigate('/')} sx={{
+                            '&:hover': {
+                                color: 'primary.main'
+                            }
+                        }}>
+                        <ArrowBackIcon />
+                </IconButton>
             
-            <Typography align='center' variant="h4" style={{ margin: '10px', color: 'black' }}>Meus eventos</Typography>
-            <Grid item xs={12} style={{ height: '100%' }}>
-                <div style={{ height: '100%', width: '100%' }}>
-                    <DataGrid
-                        rows={data}
-                        columns={colunas}
-                        initialState={{
-                            pagination: {
-                                paginationModel: { page: 0, pageSize: 5 },
-                            },
-                        }}
-                        pageSizeOptions={[5, 10]}
-                        autoHeight
-                    />
-                    <Box display="flex" justifyContent="center" mt={2}>
-                        <Button 
-                            variant='contained' 
-                            sx={{ margin: '10px' }} 
-                            endIcon={<AddIcon />} 
-                            onClick={() => navigate('/cadastraeventos')}
-                        >
-                            Novo evento
-                        </Button>
-                    </Box>
-                </div>
+            <Grid container style={{ height: '100%', width: '100%' }}>
+                
+                <Typography align='center' variant="h4" style={{ margin: '10px', color: 'black' }}>Meus eventos</Typography>
+
+                <Grid item xs={12} style={{ height: '100%' }}>
+                    <div style={{ height: '100%', width: '100%' }}>
+                        <DataGrid
+                            rows={data}
+                            columns={colunas}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: { page: 0, pageSize: 5 },
+                                },
+                            }}
+                            pageSizeOptions={[5, 10]}
+                            autoHeight
+                        />
+                        <Box display="flex" justifyContent="center" mt={2}>
+                            <Button 
+                                variant='contained' 
+                                sx={{ margin: '10px' }} 
+                                endIcon={<AddIcon />} 
+                                onClick={() => navigate('/cadastraeventos')}
+                            >
+                                Novo evento
+                            </Button>
+                        </Box>
+                    </div>
+                </Grid>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={() => setOpen(false)}
+                    message={message}
+                />
             </Grid>
-            <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={() => setOpen(false)}
-                message={message}
-            />
-        </Grid>
+        </div>
         </>
     );
 }
