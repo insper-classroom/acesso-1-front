@@ -18,14 +18,32 @@ export function ListaEventos() {
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const token = localStorage.getItem('jwtToken');
+
+    const [id, setId] = useState();
 
     useEffect(() => {
         load();
     }, []);
 
-    function load() {
-        fetch('http://localhost:8080/evento', {
-            method: 'GET'
+    async function load() {
+        
+        let id = await fetch(`http://localhost:8080/id/${token}`, {
+            method: 'GET',
+        }).then(response => {
+            return response.text();
+        }).then(id => {
+            return id;
+        }).catch(response => {
+            alert('Erro ao listar eventos!');
+            alert(response.status);
+        });
+
+        fetch(`http://localhost:8080/eventos/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': token,
+            }
         }).then(response => {
             return response.json();
         }).then(data => {
@@ -40,7 +58,8 @@ export function ListaEventos() {
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token,
             }
         }).then(response => {
             if (!response.ok) {
