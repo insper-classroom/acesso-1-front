@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar } from "@mui/material";
+import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar, Box, Tooltip } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -7,8 +7,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import 'dayjs/locale/pt-br';
 import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
 import dayjs from 'dayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 export function EditaEventos() {
     const paperStyle = { padding: '30px 20px', width: "100%" };
@@ -55,11 +55,33 @@ export function EditaEventos() {
 
     const formatStringToDate = (dateString) => {
         if (!dateString) return null;
-        return moment(dateString, 'DD/MM/YYYY');
+        return dayjs(dateString, 'DD/MM/YYYY');
+    };
+
+    const formatTimeToString = (time) => {
+        if (!time) return '';
+        return time.format('HH:mm');
     };
 
     const { id } = useParams();
     const [data, setData] = useState([]);
+
+    const [nome, setNome] = useState('');
+    const [organizador, setOrganizador] = useState('');
+    const [dataEvento, setDataEvento] = useState(null);
+    const [tipo, setTipo] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [regiao, setRegiao] = useState('');
+    const [preco, setPreco] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [foto, setFoto] = useState(null);
+    const [linkEvento, setLinkEvento] = useState(''); 
+    const [horario, setHorario] = useState(null);
+
+    const navigate = useNavigate();
+
+    const predefinedRegions = ['Heliópolis', 'Ipiranga', 'Sacomã', 'Cursino', 'Outro'];
 
     useEffect(() => {
         load();
@@ -80,26 +102,14 @@ export function EditaEventos() {
             setRegiao(data.regiao);
             setPreco(data.preco);
             setDescricao(data.descricao);
-            setFaixaEtaria(data.faixaEtaria);
+            setLinkEvento(data.link); // Ajuste aqui para garantir que linkEvento seja setado corretamente
+            setTelefone(data.telefone);
+            setHorario(dayjs(data.horario, "HH:mm"));
         }).catch(response => {
             alert('Erro ao listar eventos!');
             alert(response.status);
         });
     }
-
-    const [nome, setNome] = useState('');
-    const [organizador, setOrganizador] = useState('');
-    const [dataEvento, setDataEvento] = useState(null);
-    const [tipo, setTipo] = useState('');
-    const [endereco, setEndereco] = useState('');
-    const [regiao, setRegiao] = useState('');
-    const [preco, setPreco] = useState('');
-    const [descricao, setDescricao] = useState('');
-    const [faixaEtaria, setFaixaEtaria] = useState('');
-    const [foto, setFoto] = useState(null);
-    const navigate = useNavigate();
-
-    const predefinedRegions = ['Heliópolis', 'Ipiranga', 'Sacomã', 'Cursino', 'Outro'];
 
     function click() {
         let dataEditada = {
@@ -108,12 +118,15 @@ export function EditaEventos() {
             "tipo": tipo,
             "endereco": endereco,
             "regiao": regiao,
-            "preco": preco,
+            "preco": parseFloat(preco),
             "descricao": descricao,
-            "faixaEtaria": faixaEtaria,
             "organizador": organizador,
-            "foto": foto
+            "foto": foto,
+            "horario": formatTimeToString(horario),
+            "linkEvento": linkEvento
         }
+
+        console.log("oi");
 
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'PUT',
@@ -136,9 +149,19 @@ export function EditaEventos() {
         });
     }
 
+    const descriptionTooltip = (
+        <ul>
+            <li>Descreva o evento de forma clara e concisa</li>
+            <li>Inclua informações relevantes como atrações e atividades</li>
+            <li>Mencione se há necessidade de inscrição prévia ou restrições de idade</li>
+        </ul>
+    );
+
+    const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
+
     return (
         <>
-            <IconButton onClick={() => navigate('/')} sx={{
+            <IconButton onClick={() => navigate('/eventos')} sx={{
                         '&:hover': {
                             color: 'primary.main'
                         }
@@ -146,8 +169,7 @@ export function EditaEventos() {
                     <ArrowBackIcon />
             </IconButton>
             <Grid container alignItems="center" style={gridStyle}>
-                
-                <h2 style={{ color: 'black', textAlign: 'center', margin: '20px', flex: 1 }}>Editar evento </h2>
+                <h2 style={{ color: 'black', textAlign: 'center', margin: '20px', flex: 1 }}>Editar evento</h2>
             </Grid>
             <Grid style={gridStyle}>
                 <Typography color={'black'}>Preencha esse formulário para editar seu evento</Typography>
@@ -157,18 +179,23 @@ export function EditaEventos() {
                 alignItems: "center",
                 flexDirection: 'column',
             }}>
-                <TextField fullWidth placeholder='Nome' style={formStyle} value={nome} onChange={(event) => {
+                <TextField fullWidth label='Nome do evento' style={formStyle} value={nome} onChange={(event) => {
                     setNome(event.target.value);
                 }} />
 
-
                 <Grid style={formStyle}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true } }} defaultValue={dayjs(data.data, "DD-MM-YYYY")} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
+                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
                     </LocalizationProvider>
                 </Grid>
 
-                <TextField fullWidth placeholder='Endereço' style={formStyle} value={endereco} onChange={(event) => {
+                <Grid style={formStyle}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
+                        <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)}/>
+                    </LocalizationProvider>
+                </Grid>
+
+                <TextField fullWidth label='Endereço' style={formStyle} value={endereco} onChange={(event) => {
                     setEndereco(event.target.value);
                 }} />
 
@@ -206,32 +233,35 @@ export function EditaEventos() {
                     </Select>
                 </FormControl>
 
-                <TextField fullWidth placeholder='Preço' style={formStyle} InputProps={{
+                <TextField fullWidth label='Preço' style={formStyle} type='number' InputProps={{
                     endAdornment: <InputAdornment position="start">R$</InputAdornment>
                 }} value={preco} onChange={(event) => {
                     setPreco(event.target.value);
                 }} />
 
-                <TextField fullWidth placeholder='Descrição' style={formStyle} multiline rows={5} value={descricao} onChange={(event) => {
-                    setDescricao(event.target.value);
+                <Tooltip title={descriptionTooltip} placement="top" arrow>
+                    <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5} value={descricao} onChange={(event) => {
+                        setDescricao(event.target.value);
+                    }} />
+                </Tooltip>
+
+                <TextField fullWidth label='Telefone' style={formStyle} value={telefone} onChange={(event) => {
+                    setTelefone(event.target.value);
                 }} />
 
-                <TextField fullWidth placeholder='Faixa Etária' style={formStyle} value={faixaEtaria} onChange={(event) => {
-                    setFaixaEtaria(event.target.value);
+                <TextField fullWidth label="Link do Evento" style={formStyle} value={linkEvento} onChange={(event) => {
+                    setLinkEvento(event.target.value);
                 }} />
 
-                <Button variant='contained' endIcon={<SaveIcon />} onClick={click}>
-                    Salvar
-                </Button>
+                <Button variant="contained" onClick={() => click()} style={formStyle} endIcon={<SaveIcon />}>Salvar</Button>
             </form>
-
             <Snackbar
                 open={open}
-                autoHideDuration={6000}
+                autoHideDuration={3000}
                 onClose={handleClose}
                 message={message}
                 action={action}
-            ></Snackbar>
+            />
         </>
     );
 }

@@ -10,6 +10,7 @@ import { SignUp } from './usario/LinkCadastro'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { Home } from './homepage'
 import { NavBar } from './common/navbar'
+import { Login } from './usario/Login'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +30,7 @@ function App() {
             <Route path="/editaeventos/:id" element={<EditaEventos />} />
             <Route path="/" element={<Home />} />
             <Route path="/nav" element={<NavBar />} />
+            <Route path='/login' element={<Login />} />
           </Routes>
         </div>
       </Router>
