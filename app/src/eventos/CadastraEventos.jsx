@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar, Box, Tooltip } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -36,6 +36,9 @@ export function CadastraEvento() {
     const [telefone, setTelefone] = React.useState();
     const [foto, setFoto] = React.useState();
     const [linkEvento, setLinkEvento] = React.useState();
+
+    const [id, setId] = React.useState();
+    const [data, setData] = React.useState([]);
 
     const [open, setOpen] = useState(false);
 
@@ -90,6 +93,27 @@ export function CadastraEvento() {
         width: 1,
     });
 
+    useEffect(() => {
+        load(token);
+    }, []);
+
+    function load(token) {
+        fetch(`http://localhost:8080/id/${token}`, {
+            method: 'GET',
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            setData(data);
+            setId(data)
+            console.log(data);
+        }).catch(response => {
+            alert('Erro ao listar eventos!');
+            alert(response.status);
+            console.log(data);
+        });
+    }
+    
+
     function click() {
         let data = {
             "nome": nome,
@@ -107,7 +131,7 @@ export function CadastraEvento() {
 
         console.log(token);
 
-        fetch('http://localhost:8080/evento/665f56f55237a07cc9331462', {
+        fetch(`http://localhost:8080/evento/${id}`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {

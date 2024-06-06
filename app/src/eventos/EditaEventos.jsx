@@ -132,8 +132,6 @@ export function EditaEventos() {
             "linkEvento": linkEvento
         }
 
-        console.log("oi");
-
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'PUT',
             body: JSON.stringify(dataEditada),
