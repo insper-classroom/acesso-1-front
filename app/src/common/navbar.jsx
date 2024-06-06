@@ -34,7 +34,7 @@ export function NavBar() {
                 >
                     <CelebrationIcon sx={{color: 'white'}}/>
                 </IconButton>
-                <Typography variant='h6' component='div' sx={{flexGrow: 1, display:{xs:'none',md:'flex'}}}> Nome app </Typography>
+                <Typography variant='h6' component='div' sx={{flexGrow: 1, display:{xs:'none',md:'flex'}}}> Helipa Eventos </Typography>
                 <Box sx={{display:{xs:'none',md:'flex'}}}>
                     <Button color='inherit' onClick={() => navigate('/')}>Home</Button>
                     <Button color='inherit' onClick={() => navigate('/eventos')}>Meus Eventos</Button>
