@@ -1,9 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Button, Grid } from '@mui/material';
+import { Typography, Button, Grid, Tooltip } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 export function Home() {
     const navigate = useNavigate();
+    const [signupLink, setSignupLink] = useState('');
+    const [showCopiedTooltip, setShowCopiedTooltip] = useState(false); // Estado para controlar a exibição do tooltip de cópia
+
+    const generateSignUpLink = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/signup');
+            if (!response.ok) {
+                throw new Error('Failed to fetch signup link');
+            }
+            const link = await response.text();
+            
+            const token = link.split('/').pop();
+            const frontendLink = `http://localhost:5173/cadastrausuarios/${token}`;
+            setSignupLink(frontendLink);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const copyToClipboard = (link) => {
+        setShowCopiedTooltip(true); // Mostra o tooltip de confirmação de cópia
+        navigator.clipboard.writeText(link);
+    };
+
+    const handleTooltipClose = () => {
+        setShowCopiedTooltip(false);
+    };
 
     return (
         <Grid
@@ -22,7 +50,7 @@ export function Home() {
                     variant="contained"
                     color="primary"
                     onClick={() => navigate(`/eventos`)}
-                    style={{ width: '200px' }} // Definindo o mesmo tamanho para ambos os botões
+                    style={{ width: '200px' }} 
                 >
                     Meus Eventos
                 </Button>
@@ -32,7 +60,7 @@ export function Home() {
                     variant="contained"
                     color="primary"
                     onClick={() => navigate(`/cadastraeventos`)}
-                    style={{ width: '200px' }} // Definindo o mesmo tamanho para ambos os botões
+                    style={{ width: '200px' }} 
                 >
                     Novo Evento
                 </Button>
@@ -41,12 +69,28 @@ export function Home() {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => navigate(`/linkcadastro`)}
-                    style={{ width: '200px' }} // Definindo o mesmo tamanho para ambos os botões
+                    onClick={generateSignUpLink} // Chama a função para gerar o link de cadastro
+                    style={{ width: '200px' }} 
                 >
-                    Gera Link Cadastro
+                    Convidar Organizador
                 </Button>
             </Grid>
+                {/* Mostra o link gerado e o botão de cópia */}
+            {signupLink && (
+                <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                        <span style={{ color: 'blue', marginRight: '10px' }}>{signupLink}</span>
+                        <Button variant="outlined" onClick={() => copyToClipboard(signupLink)}>
+                            <ContentCopyIcon />
+                        </Button>
+                        <Tooltip
+                            open={showCopiedTooltip}
+                            title="Copied!"
+                            placement="top"
+                            onClose={handleTooltipClose}
+                        >
+                            </Tooltip>
+                </div>
+                )}
         </Grid>
     );
 }
