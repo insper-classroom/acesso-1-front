@@ -178,28 +178,33 @@ export function EditaEventos() {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: 'column',
+                backgroundColor: "#f0f0f0", 
+                padding: "20px", 
+                borderRadius: "10px" 
             }}>
-                <TextField fullWidth label='Nome do evento' style={formStyle} value={nome} onChange={(event) => {
+                <TextField fullWidth label='Nome do evento' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={nome} onChange={(event) => {
                     setNome(event.target.value);
                 }} />
 
                 <Grid style={formStyle}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
+                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white' } } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
                     </LocalizationProvider>
                 </Grid>
 
                 <Grid style={formStyle}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)}/>
-                    </LocalizationProvider>
+                    <Paper style={{backgroundColor: 'white', borderRadius: '5px', boxShadow: 'none'}}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
+                            <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)}/>
+                        </LocalizationProvider>
+                    </Paper>
                 </Grid>
 
-                <TextField fullWidth label='Endereço' style={formStyle} value={endereco} onChange={(event) => {
+                <TextField fullWidth label='Endereço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={endereco} onChange={(event) => {
                     setEndereco(event.target.value);
                 }} />
 
-                <FormControl fullWidth style={formStyle}>
+                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
                     <InputLabel>Região</InputLabel>
                     <Select
                         value={regiao}
@@ -217,7 +222,7 @@ export function EditaEventos() {
                     </Select>
                 </FormControl>
 
-                <FormControl fullWidth style={formStyle}>
+                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
                     <InputLabel>Tipo</InputLabel>
                     <Select
                         value={tipo}
@@ -233,23 +238,23 @@ export function EditaEventos() {
                     </Select>
                 </FormControl>
 
-                <TextField fullWidth label='Preço' style={formStyle} type='number' InputProps={{
+                <TextField fullWidth label='Preço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} type='number' InputProps={{
                     endAdornment: <InputAdornment position="start">R$</InputAdornment>
                 }} value={preco} onChange={(event) => {
                     setPreco(event.target.value);
                 }} />
 
                 <Tooltip title={descriptionTooltip} placement="top" arrow>
-                    <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5} value={descricao} onChange={(event) => {
+                    <TextField fullWidth label='Descrição' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} multiline rows={5} value={descricao} onChange={(event) => {
                         setDescricao(event.target.value);
                     }} />
                 </Tooltip>
 
-                <TextField fullWidth label='Telefone' style={formStyle} value={telefone} onChange={(event) => {
+                <TextField fullWidth label='Telefone' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={telefone} onChange={(event) => {
                     setTelefone(event.target.value);
                 }} />
 
-                <TextField fullWidth label="Link do Evento" style={formStyle} value={linkEvento} onChange={(event) => {
+                <TextField fullWidth label="Link do Evento" style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={linkEvento} onChange={(event) => {
                     setLinkEvento(event.target.value);
                 }} />
 
