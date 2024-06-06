@@ -103,8 +103,6 @@ export function CadastraEvento() {
             "horario": formatTimeToString(horario),
         }
 
-        console.log(data)
-
         fetch('http://localhost:8080/evento/665f56f55237a07cc9331462', {
             method: 'POST',
             body: JSON.stringify(data),
