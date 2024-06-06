@@ -51,6 +51,8 @@ export function CadastraEvento() {
         setOpen(false);
     };
 
+    const token = localStorage.getItem('jwtToken');
+
     const action = (
         <Fragment>
             <Button color="secondary" size="small" onClick={handleClose}>
@@ -103,17 +105,21 @@ export function CadastraEvento() {
             "horario": formatTimeToString(horario),
         }
 
+        console.log(token);
+
         fetch('http://localhost:8080/evento/665f56f55237a07cc9331462', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':token,
             }
         }).then(response => {
             if (!response.ok) {
                 // error processing
                 throw 'Error';
             }
+            console.log(response);
             setOpen(true);
             setMessage("Evento cadastrado com sucesso!");
             //load()

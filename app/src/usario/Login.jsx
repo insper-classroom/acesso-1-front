@@ -19,6 +19,10 @@ export function Login() {
         setTipo(event.target.value);
     };
 
+    const saveToken = (token) => {
+        localStorage.setItem('jwtToken', token);
+      };
+
     const handleChangeRegiao = (event) => {
         setRegiao(event.target.value);
     };
@@ -73,9 +77,13 @@ export function Login() {
                 // error processing
                 throw 'Error';
             }
+            return response.text();
+        }).then(data => {
             setOpen(true);
             setMessage("Login feito com sucesso!");
             navigate('/');
+            saveToken(data);
+            console.log(data);
             //load()
         }).catch(response => {
             setOpen(true);

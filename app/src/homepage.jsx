@@ -29,6 +29,12 @@ export function Home() {
         navigator.clipboard.writeText(link);
     };
 
+const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      console.error('Token não encontrado. Faça login novamente.');
+      return navigate('/login');
+    }
+
     const handleTooltipClose = () => {
         setShowCopiedTooltip(false);
     };

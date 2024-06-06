@@ -18,6 +18,7 @@ export function ListaEventos() {
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const token = localStorage.getItem('jwtToken');
 
     useEffect(() => {
         load();
@@ -25,7 +26,10 @@ export function ListaEventos() {
 
     function load() {
         fetch('http://localhost:8080/evento', {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': token,
+            }
         }).then(response => {
             return response.json();
         }).then(data => {
