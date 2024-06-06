@@ -57,14 +57,15 @@ export function ListaEventos() {
 
     const colunas = [
         { field: 'nome', headerName: 'Nome', flex: 1, minWidth: 100 },
-        { field: 'organizador', headerName: 'Organizador', flex: 1, minWidth: 100 },
         { field: 'data', headerName: 'Data', flex: 1, minWidth: 100 },
+        { field: 'horario', headerName: 'Horário', flex: 1, minWidth: 100 },
         { field: 'tipo', headerName: 'Tipo', flex: 1, minWidth: 100, type: 'singleSelect', valueOptions: ['Tipo 1', 'Tipo 2', 'Tipo 3'] },
         { field: 'endereco', headerName: 'Endereco', flex: 1, minWidth: 100 },
         { field: 'regiao', headerName: 'Regiao', flex: 1, minWidth: 100 },
         { field: 'preco', headerName: 'Preço', flex: 1, minWidth: 100 },
         { field: 'descricao', headerName: 'Descrição', flex: 2, minWidth: 150 },
-        { field: 'faixaEtaria', headerName: 'Faixa Etária', flex: 1, minWidth: 100 },
+        { field: 'telefone', headerName: 'Telefone', flex: 1, minWidth: 100 },
+        { field: 'link', headerName: 'Link', flex: 1, minWidth: 100 },
         {
             field: 'editar',
             headerName: 'Editar',
