@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button } from '@mui/material';
 
 export function SignUp() {
   const [signupLink, setSignupLink] = useState('');
@@ -10,7 +11,11 @@ export function SignUp() {
         throw new Error('Failed to fetch signup link');
       }
       const link = await response.text();
-      setSignupLink(link);
+      
+      const token = link.split('/').pop();
+
+      const frontendLink = `http://localhost:5173/cadastrausuarios/${token}`;
+      setSignupLink(frontendLink);
     } catch (error) {
       console.error(error);
     }
@@ -18,7 +23,7 @@ export function SignUp() {
 
   return (
     <div>
-      <button onClick={generateSignUpLink}>Gerar Link de Cadastro</button>
+      <Button variant="contained" onClick={generateSignUpLink}>Gerar Link de Cadastro</Button>
       {signupLink && <p style={{ color: 'blue' }}>{signupLink}</p>}
     </div>
   );
