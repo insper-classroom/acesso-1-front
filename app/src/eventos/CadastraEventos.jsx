@@ -12,7 +12,7 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 export function CadastraEvento() {
-    const paperStyle = { padding: '30px 20px', width: "100%" };
+    const paperStyle = { padding: '30px 20px', width: "100%", backgroundColor: "#f0f0f0" };
     const gridStyle = { margin: '10px' };
     const formStyle = { margin: '10px' };
 
@@ -148,32 +148,30 @@ export function CadastraEvento() {
                 <h2 style={{ color: 'black', textAlign: 'center', margin: '20px' }}>Novo evento</h2>
                 <Typography color={'black'}>Preencha esse formulário para cadastrar um novo evento</Typography>
             </Grid>
-            <form action="" style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: 'column',
-            }}>
-                <TextField fullWidth label='Nome do evento' style={formStyle} value={nome} onChange={(event) => {
+            <form style={{ display: "flex", alignItems: "center", flexDirection: 'column', backgroundColor: "#f0f0f0", padding: "20px", borderRadius: "10px" }} onSubmit={click}>
+                <TextField fullWidth label='Nome do evento' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={nome} onChange={(event) => {
                     setNome(event.target.value);
                 }} />
 
-                <Grid style={formStyle}>
+                <Grid style={{ margin: '10px' }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
+                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white' } } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
 
                     </LocalizationProvider>
 
                 </Grid>
-                <Grid style={formStyle}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)} />
-                    </LocalizationProvider>
+                <Grid style={{ margin: '10px' }}>
+                    <Paper style={{backgroundColor: 'white', borderRadius: '5px', boxShadow: 'none'}}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
+                            <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)} />
+                        </LocalizationProvider>
+                    </Paper>
                 </Grid>
 
-                <TextField fullWidth label='Endereço' style={formStyle} value={endereco} onChange={(event) => {
+                <TextField fullWidth label='Endereço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={endereco} onChange={(event) => {
                     setEndereco(event.target.value);
                 }} />
-                <FormControl fullWidth style={formStyle}>
+                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
                     <InputLabel>Região</InputLabel>
                     <Select
                         value={regiao}
@@ -188,7 +186,7 @@ export function CadastraEvento() {
                         <MenuItem value={'Outro'}>Outro</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl fullWidth style={formStyle}>
+                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
                     <InputLabel>Tipo</InputLabel>
                     <Select
                         value={tipo}
@@ -202,30 +200,31 @@ export function CadastraEvento() {
                         <MenuItem value={'Religioso'}>Religioso</MenuItem>
                         <MenuItem value={'Educacional'}>Educacional</MenuItem>
                         <MenuItem value={'Acadêmico'}>Acadêmico</MenuItem>
+                        <MenuItem value={'Outro'}>Outro</MenuItem>
                     </Select>
                 </FormControl>
-                <TextField fullWidth label='Preço' style={formStyle} type='number' InputProps={{
+                <TextField fullWidth label='Preço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} type='number' InputProps={{
                     endAdornment: <InputAdornment position="start">R$</InputAdornment>
                 }} value={preco} onChange={(event) => {
                     setPreco(event.target.value);
                 }} />
                 <Tooltip title={descriptionTooltip} placement="top" arrow>
-                    <TextField fullWidth label='Descrição' style={formStyle} multiline rows={5} value={descricao} onChange={(event) => {
+                    <TextField fullWidth label='Descrição' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} multiline rows={5} value={descricao} onChange={(event) => {
                         setDescricao(event.target.value);
                     }} />
                 </Tooltip>
                 <Tooltip title={phoneTooltip} placement="top" arrow>
-                    <TextField fullWidth label='Telefone' style={formStyle} value={telefone} onChange={(event) => {
+                    <TextField fullWidth label='Telefone' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={telefone} onChange={(event) => {
                         setTelefone(event.target.value);
                     }} />
                 </Tooltip>
 
-                <TextField fullWidth label='Link do evento' style={formStyle} value={linkEvento} onChange={(event) => {
+                <TextField fullWidth label='Link do evento' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={linkEvento} onChange={(event) => {
                     setLinkEvento(event.target.value);
                 }} />
 
                 <Box sx={{ margin: '10px' }}>
-                    <Button variant='contained' endIcon={<SaveIcon />} onClick={() => click(0)}>Cadastrar</Button>
+                    <Button variant='contained' color="primary" endIcon={<SaveIcon />} type="submit">Cadastrar</Button>
                 </Box>
             </form>
 
