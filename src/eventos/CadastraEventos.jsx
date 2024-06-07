@@ -164,7 +164,7 @@ export function CadastraEvento() {
 
     // Função para carregar dados do servidor
     function load(token) {
-        fetch(`http://localhost:8080/id/${token}`, {
+        fetch(`https://api.helipaeventos.com.br/id/${token}`, {
             method: 'GET',
         }).then(response => {
             return response.text();
@@ -198,7 +198,7 @@ export function CadastraEvento() {
 
         console.log(token);
 
-        fetch(`http://localhost:8080/evento/${id}`, {
+        fetch(`https://api.helipaeventos.com.br/evento/${id}`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {

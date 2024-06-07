@@ -161,7 +161,7 @@ export function EditaEventos() {
 
     // Função para carregar dados do evento do servidor
     function load() {
-        fetch(`http://localhost:8080/evento/${id}`, {
+        fetch(`https://api.helipaeventos.com.br/evento/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': token,
@@ -204,7 +204,7 @@ export function EditaEventos() {
             "telefone": telefone
         }
 
-        fetch(`http://localhost:8080/evento/${id}`, {
+        fetch(`https://api.helipaeventos.com.br/evento/${id}`, {
             method: 'PUT',
             body: JSON.stringify(dataEditada),
             headers: {

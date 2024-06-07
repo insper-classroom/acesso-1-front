@@ -73,7 +73,7 @@ export function ListaEventos() {
 
     async function load() {
         // Obtém o ID do usuário
-        let id = await fetch(`http://localhost:8080/id/${token}`, {
+        let id = await fetch(`https://api.helipaeventos.com.br/id/${token}`, {
             method: 'GET',
         }).then(response => response.text())
         .catch(response => {
@@ -82,7 +82,7 @@ export function ListaEventos() {
         });
 
         // Busca os eventos do usuário
-        fetch(`http://localhost:8080/eventos/${id}`, {
+        fetch(`https://api.helipaeventos.com.br/eventos/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': token,
@@ -104,7 +104,7 @@ export function ListaEventos() {
 
     // Função para deletar um evento
     function deleteEvento(id) {
-        fetch(`http://localhost:8080/evento/${id}`, {
+        fetch(`https://api.helipaeventos.com.br/evento/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
