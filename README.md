@@ -1,34 +1,52 @@
-# Direito à Cidade dos Jovens de Heliópolis - Front End em React JS + Vite - Grupo 1
+# Helipa Eventos
 
-## Integrantes do Projeto:
-- Ana Helena Caiafa
-- Deena El Orra
-- Guilherme Kaidei
-- Gustavo Ribolla
-- Henrique Junqueira
-- Thiago Penha
+## Direito ao Acesso à Cidade aos Jovens de Heliópolis - Grupo 1
 
+## Aplicação
 
-## Descrição do Problema:
-Os jovens de Heliópolis enfrentam dificuldades para acessar a cidade devido a barreiras financeiras, sociais e estruturais, entre outras.
+Front End em React JS + Vite
 
-## Proposta de Solução:
-Desenvolver um sistema onde organizadores de eventos possam cadastrar eventos por meio de um site, e os usuários possam visualizar esses eventos através de um chat-bot no WhatsApp, com a possibilidade de filtrar por data, tipo e outras informações relevantes.
+## Descrição do Problema
 
-## Estrutura do Projeto:
-O aplicativo está localizado na pasta `app`. O arquivo principal é o `App.jsx`, e as diferentes páginas estão organizadas nas pastas `common`, `eventos` e `usuario`.
+Os jovens de Heliópolis, durante seu tempo de lazer, ficam limitados à espaços dentro da comunidade. Entretanto, em uma região tão vasta, existem diversas oportunidades de lazer ao entorno do território, que podem ampliar essa população nas suas opções de diversão. Os pontos mais importantes observados pelo grupo foram a falta de incentivo à cultura e o desinteresse populacional, ponto crucial, dado que eventos acontecem a todo momento na região.
 
-## Instruções de Execução:
-1. Clone o repositório em sua máquina.
+## Proposta de Solução
+
+Desenvolver um sistema onde organizadores de eventos possam cadastrar eventos por meio de um site, e os usuários possam visualizar esses eventos através de um chat-bot no WhatsApp, com a possibilidade de filtrar por data, região, categoria e preço. Dessa forma, buscamos ampliar a divulgação de eventos dentro da comunidade, através de um chatbot, de forma a ampliar as opções dos jovens e incentivar a busca pela informação.
+
+## Estrutura do Projeto
+
+1. Aplicativo localizado na pasta `app`;
+2. Arquivo principal é o `App.jsx`;
+3. Diferentes páginas estão organizadas nas pastas `common`, `eventos` e `usario`.
+
+## Instruções de Execução
+
+1. Clone o [repositório](https://github.com/insper-classroom/acesso-1-front.git) em sua máquina.
 2. Instale o Node.js: [Download Node.js](https://nodejs.org/en/download/prebuilt-binaries)
 3. Instale o Vite: [Vite.js](https://vitejs.dev/)
-4. Dentro do repositório, navegue até a pasta `app` e execute o comando: `npm install`
+4. Dentro do repositório, execute o comando: `npm install`
 5. Instale as dependências listadas no arquivo `package.json`
 6. Execute o comando: `npm run dev`
 
-## Funcionalidade:
+## Funcionalidade
+
 Esta é a interface front-end de uma plataforma que permite aos organizadores cadastrar e gerenciar eventos, facilitando aos usuários a busca por esses eventos através de um chatbot no WhatsApp.
 
-## Referências:
-- Eduardo Zambom (Professor)
-- ChatGPT
+## Arquitetura
+
+![Alt Text](photos/arquitetura.jpeg)
+
+## Slides de Apresentação
+
+[Slides usados na Apresentação do Projeto](https://www.canva.com/design/DAGHde_rdRk/5zpKa41VQEeIy4j-Ag62dw/edit?utm_content=DAGHde_rdRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+## Referências
+
+1. Auxílio do [ChatGPT](https://chatgpt.com/) para dúvidas com o código;
+2. Contribuição do professor [Eduardo Felipe Zambom Santana](https://github.com/ezambomsantana).
+
+
+## Desenvolvedores
+
+Projeto desenvolvido por [Ana Helena Caiafa](https://github.com/anahc3), [Deena El Orra](https://github.com/DeenaElOrra), [Guilherme Kaidei](https://github.com/guikaidei), [Gustavo Ribolla](https://github.com/ribollequis87), [Henrique Junqueira](https://github.com/henriquemjf) e [Thiago Penha](https://github.com/tpenha05).
