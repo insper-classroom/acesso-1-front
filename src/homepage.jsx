@@ -100,7 +100,7 @@ export function Home() {
       }
       const link = await response.text();
       const token = link.split('/').pop();
-      const frontendLink = `https://api.helipaeventos.com.br/cadastrausuarios/${token}`;
+      const frontendLink = `https://acesso-1-front.vercel.app/cadastrausuarios/${token}`;
       setSignupLink(frontendLink);
     } catch (error) {
       console.error(error);
