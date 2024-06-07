@@ -311,13 +311,13 @@ export function CadastraEvento() {
                             </Tooltip>
                             <Tooltip title={phoneTooltip} placement="top" arrow>
                                 <CustomTextField
-                                    label='Telefone'
+                                    label='Telefone (Opcional)'
                                     value={telefone}
                                     onChange={(event) => setTelefone(event.target.value)}
                                 />
                             </Tooltip>
                             <CustomTextField
-                                label='Link do evento'
+                                label='Link do evento (Opcional)'
                                 value={linkEvento}
                                 onChange={(event) => setLinkEvento(event.target.value)}
                             />
