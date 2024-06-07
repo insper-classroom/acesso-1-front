@@ -16,11 +16,14 @@ Desenvolver um sistema onde organizadores de eventos possam cadastrar eventos po
 
 ## Estrutura do Projeto
 
-1. Aplicativo localizado na pasta `app`;
-2. Arquivo principal é o `App.jsx`;
-3. Diferentes páginas estão organizadas nas pastas `common`, `eventos` e `usario`.
+1. Arquivo principal é o `App.jsx`;
+2. Diferentes páginas estão organizadas nas pastas `common`, `eventos` e `usario`.
 
 ## Instruções de Execução
+
+[Site do Deploy](www.helipaeventos.com.br)
+
+Caso queira testar em sua máquina:
 
 1. Clone o [repositório](https://github.com/insper-classroom/acesso-1-front.git) em sua máquina.
 2. Instale o Node.js: [Download Node.js](https://nodejs.org/en/download/prebuilt-binaries)
@@ -37,9 +40,10 @@ Esta é a interface front-end de uma plataforma que permite aos organizadores ca
 
 ![Alt Text](photos/arquitetura.jpeg)
 
-## Slides de Apresentação
+## Slides e Back Log
 
-[Slides usados na Apresentação do Projeto](https://www.canva.com/design/DAGHde_rdRk/5zpKa41VQEeIy4j-Ag62dw/edit?utm_content=DAGHde_rdRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+1. [Slides usados na Apresentação do Projeto](https://www.canva.com/design/DAGHde_rdRk/5zpKa41VQEeIy4j-Ag62dw/edit?utm_content=DAGHde_rdRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+2. [Organização no Notion](https://www.notion.so/Helipa-Eventos-c256e1219d024f8a9d281c8283d464b7)
 
 ## Referências
 
