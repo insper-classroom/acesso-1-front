@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography, Button, Grid, Tooltip, Box, Paper } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -79,11 +79,14 @@ export function Home() {
   const theme = useTheme();
   const [signupLink, setSignupLink] = useState('');
   const [showCopiedTooltip, setShowCopiedTooltip] = useState(false);
-  const token = localStorage.getItem('jwtToken');
-  if (!token) {
-    console.error('Token não encontrado. Faça login novamente.');
-    return navigate('/login');
-  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      console.error('Token não encontrado. Faça login novamente.');
+      navigate('/login');
+    }
+  }, []);
 
   const handleTooltipClose = () => {
     setShowCopiedTooltip(false);

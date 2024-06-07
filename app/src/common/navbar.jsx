@@ -33,6 +33,11 @@ export function NavBar() {
         handleClose();
     }
 
+    const logout = () => {
+        localStorage.removeItem('jwtToken');
+        navigate('/login');
+    };
+
     return (
         <StyledAppBar position='static'>
             <Toolbar>
@@ -50,6 +55,7 @@ export function NavBar() {
                     <StyledButton color='inherit' onClick={() => navigate('/')}>Home</StyledButton>
                     <StyledButton color='inherit' onClick={() => navigate('/eventos')}>Meus Eventos</StyledButton>
                     <StyledButton color='inherit' onClick={() => navigate('/cadastraeventos')}>Novo Evento</StyledButton>
+                    <StyledButton color='inherit' onClick={logout}>Logout</StyledButton>
                 </Box>
                 <Box sx={{display:{xs:'flex',md:'none'}}}>
                     <IconButton size='large' edge='start' color='inherit' aria-label='menu' onClick={handleClick}>
