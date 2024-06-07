@@ -1,33 +1,47 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Typography, Button, Grid, Tooltip } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { Typography, Button, Grid, Tooltip, Box, Paper } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useTheme, styled } from '@mui/material/styles';
+import { NavBar } from './common/navbar';
 
-export function Home() {
-    const navigate = useNavigate();
-    const [signupLink, setSignupLink] = useState('');
-    const [showCopiedTooltip, setShowCopiedTooltip] = useState(false); // Estado para controlar a exibição do tooltip de cópia
+const MainContainer = styled(Grid)(({ theme }) => ({
+  minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+  display: 'grid',
+  gridTemplateRows: 'auto 1fr', // Duas linhas, a primeira para a NavBar e a segunda para o conteúdo
+}));
 
-    const generateSignUpLink = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/signup');
-            if (!response.ok) {
-                throw new Error('Failed to fetch signup link');
-            }
-            const link = await response.text();
-            
-            const token = link.split('/').pop();
-            const frontendLink = `http://localhost:5173/cadastrausuarios/${token}`;
-            setSignupLink(frontendLink);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+const Container = styled(Grid)(({ theme }) => ({
+  background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+  padding: '0% 5% 5% 5%',
+  textAlign: 'center',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column', // Align items in column direction
+  overflow: 'auto', // Add scroll bar when content overflows
+}));
 
-    const copyToClipboard = (link) => {
-        setShowCopiedTooltip(true); // Mostra o tooltip de confirmação de cópia
-        navigator.clipboard.writeText(link);
-    };
+const Title = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+  color: theme.palette.primary.contrastText,
+  fontWeight: 'bold',
+}));
+
+const ActionButton = styled(Button)(({ theme }) => ({
+  width: '250px', // Increased width
+  height: '60px', // Increased height
+  margin: theme.spacing(1, 0),
+  borderRadius: '20px',
+  backgroundColor: '#70a1ff', // Lighter blue color for buttons
+  color: '#fff',
+  fontSize: '18px', // Increased font size
+  fontWeight: 'bold',
+  textTransform: 'capitalize', // Capitalize the first letter
+  '&:hover': {
+    backgroundColor: '#1e90ff', // Darker blue on hover
+  },
+}));
 
 const token = localStorage.getItem('jwtToken');
     if (!token) {
@@ -39,64 +53,95 @@ const token = localStorage.getItem('jwtToken');
         setShowCopiedTooltip(false);
     };
 
-    return (
-        <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-            style={{ minHeight: '100vh' }}
-        >
-            <Grid item>
-                <Typography variant="h2">Bem-vindo ao sistema de eventos</Typography>
-            </Grid>
-            <Grid item>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate(`/eventos`)}
-                    style={{ width: '200px' }} 
-                >
-                    Meus Eventos
+const LinkContainer = styled(Paper)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: theme.spacing(2),
+  padding: theme.spacing(2),
+  backgroundColor: '#fff', // White background for the link container
+  color: theme.palette.text.primary,
+  width: '250px', // Match the button width
+  maxWidth: '600px', // Max width to prevent it from getting too large
+  fontWeight: 'bold',
+}));
+
+const StyledTooltip = styled(Tooltip)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+}));
+
+const ButtonContainer = styled(Box)(({ theme }) => ({
+  backgroundColor: 'rgba(255, 255, 255, 0.8)', // White transparent background
+  padding: theme.spacing(4),
+  borderRadius: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
+export function Home() {
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const [signupLink, setSignupLink] = useState('');
+  const [showCopiedTooltip, setShowCopiedTooltip] = useState(false);
+
+  const generateSignUpLink = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/signup');
+      if (!response.ok) {
+        throw new Error('Failed to fetch signup link');
+      }
+      const link = await response.text();
+      const token = link.split('/').pop();
+      const frontendLink = `http://localhost:5173/cadastrausuarios/${token}`;
+      setSignupLink(frontendLink);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const copyToClipboard = (link) => {
+    navigator.clipboard.writeText(link);
+    setShowCopiedTooltip(true);
+    setTimeout(() => setShowCopiedTooltip(false), 2000); // Hide tooltip after 2 seconds
+  };
+
+  return (
+    <MainContainer container>
+      <NavBar />
+      <Container container>
+        <ButtonContainer>
+          <Title variant="h2" style={{ color: 'black' }}>Home</Title>
+          <ActionButton variant="contained" onClick={() => navigate(`/eventos`)}>
+            Meus Eventos
+          </ActionButton>
+          <ActionButton variant="contained" onClick={() => navigate(`/cadastraeventos`)}>
+            Novo Evento
+          </ActionButton>
+          <ActionButton variant="contained" onClick={generateSignUpLink}>
+            Convidar Organizador
+          </ActionButton>
+          {signupLink && (
+            <>
+              <LinkContainer>
+                <Typography variant="body1" component="span" sx={{ wordBreak: 'break-all', marginBottom: 2, fontWeight: 'bold' }}>
+                  <Link to={signupLink}>{signupLink}</Link>
+                </Typography>
+                <Button variant="outlined" onClick={() => copyToClipboard(signupLink)} style={{ fontWeight: 'bold' }}>
+                  <ContentCopyIcon />
                 </Button>
-            </Grid>
-            <Grid item>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate(`/cadastraeventos`)}
-                    style={{ width: '200px' }} 
-                >
-                    Novo Evento
-                </Button>
-            </Grid>
-            <Grid item>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={generateSignUpLink} // Chama a função para gerar o link de cadastro
-                    style={{ width: '200px' }} 
-                >
-                    Convidar Organizador
-                </Button>
-            </Grid>
-                {/* Mostra o link gerado e o botão de cópia */}
-            {signupLink && (
-                <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                        <span style={{ color: 'blue', marginRight: '10px' }}>{signupLink}</span>
-                        <Button variant="outlined" onClick={() => copyToClipboard(signupLink)}>
-                            <ContentCopyIcon />
-                        </Button>
-                        <Tooltip
-                            open={showCopiedTooltip}
-                            title="Copied!"
-                            placement="top"
-                            onClose={handleTooltipClose}
-                        >
-                            </Tooltip>
-                </div>
-                )}
-        </Grid>
-    );
+                <StyledTooltip open={showCopiedTooltip} title="Copied!" placement="top">
+                  <span></span>
+                </StyledTooltip>
+              </LinkContainer>
+              <Typography variant="caption" color={'black'} fontSize={"16px"} sx={{ marginTop: 2, fontWeight: 'bold' }}>
+                Envie esse link para outro organizador se cadastrar
+              </Typography>
+            </>
+          )}
+        </ButtonContainer>
+      </Container>
+    </MainContainer>
+  );
 }

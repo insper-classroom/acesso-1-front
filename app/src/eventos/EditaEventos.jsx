@@ -165,7 +165,7 @@ export function EditaEventos() {
     const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
 
     return (
-        <>
+        <div style={{padding: "5%"}}>
             <IconButton onClick={() => navigate('/eventos')} sx={{
                         '&:hover': {
                             color: 'primary.main'
@@ -272,6 +272,6 @@ export function EditaEventos() {
                 message={message}
                 action={action}
             />
-        </>
+        </div>
     );
 }
