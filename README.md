@@ -21,6 +21,7 @@ Desenvolver um sistema onde organizadores de eventos possam cadastrar eventos po
 
 ## Instruções de Execução
 
+[Site do Deploy Geral](www.helipaeventos.com.br)
 [Site do Deploy](https://acesso-1-front.vercel.app/)
 
 Caso queira testar em sua máquina:
@@ -43,7 +44,19 @@ Esta é a interface front-end de uma plataforma que permite aos organizadores ca
 ## Slides e Back Log
 
 1. [Slides usados na Apresentação do Projeto](https://www.canva.com/design/DAGHde_rdRk/5zpKa41VQEeIy4j-Ag62dw/edit?utm_content=DAGHde_rdRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton);
-2. [Organização no Notion](https://www.notion.so/Helipa-Eventos-c256e1219d024f8a9d281c8283d464b7).
+
+2. Organização no Notion:
+
+- [Geral](https://robust-ferry-149.notion.site/Helipa-Eventos-c256e1219d024f8a9d281c8283d464b7)
+
+- [Quadro de Tarefas - Backend](https://robust-ferry-149.notion.site/6a9685b7ac1243c986d93ba0e61ff3fb?v=aba3b9f0d8b14446b7ab1b906f54d44e)
+
+- [Quadro de Tarefas - Frontend](https://robust-ferry-149.notion.site/db6090be580d4c29ac8c973e5774ed70?v=91457808434e4fc6bb2b18487750a2d6)
+
+- [Quadro de Tarefas - ChatBot](https://robust-ferry-149.notion.site/3937aaa663d345e09094571fcbd399ad?v=3162f98470984dbd8b0a0800e8f51afa)
+
+- [Quadro de Tarefas - Entregas](https://robust-ferry-149.notion.site/10fbd338436a420fab177b0edd262bcc?v=46b2d50c24fb4aeb9f2e6850b15cd153)
+
 
 ## Referências
 
