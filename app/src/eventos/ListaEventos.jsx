@@ -1,30 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar, Box } from "@mui/material";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import SaveIcon from '@mui/icons-material/Save';
+import { Grid, Paper, Typography, Button, IconButton, Snackbar, Box } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import 'dayjs/locale/pt-br';
-import { DataGrid } from '@mui/x-data-grid';
-import { EditaEventos } from './EditaEventos';
-import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { NavBar } from '../common/navbar'
+import { useNavigate } from 'react-router-dom';
+import { NavBar } from '../common/navbar';
+import { styled } from '@mui/material/styles';
 
-const Container = styled(Grid)(({ theme }) => ({
+const Container = styled('div')({
     minHeight: '100%', // Ensure the container takes the full viewport height
     background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
-    padding: theme.spacing(4),
-    textAlign: 'center',
-    margin: 0,
-    width: '100%',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column', // Align items in column direction
-  }));
+    padding: '0% 5% 5% 5%',
+});
 
+const ContentContainer = styled(Box)(({ theme }) => ({
+    background: 'rgba(255, 255, 255, 0.6)', // Fundo branco ligeiramente transparente
+    padding: theme.spacing(3),
+    borderRadius: theme.spacing(2),
+    width: '100%', // Ocupar toda a largura disponível
+    [theme.breakpoints.up('lg')]: {
+        width: '50%', // 50% de largura em dispositivos grandes
+    },
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: '16px',
+    textAlign: 'center',
+    borderRadius: '16px',
+    boxShadow: 'none', // Remover sombra
+}));
+
+const CustomButton = styled(Button)(({ theme }) => ({
+    borderRadius: '12px', // Arredonda os botões
+    '&.MuiButton-containedPrimary': {
+        backgroundColor: '#4f8cff', // Cor personalizada para botões azuis
+        '&:hover': {
+            backgroundColor: '#3b7adf', // Tom mais escuro ao passar o mouse
+        },
+    },
+    '&.MuiButton-containedError': {
+        backgroundColor: '#ff4949', // Cor personalizada para botão de excluir
+        '&:hover': {
+            backgroundColor: '#e63939', // Tom mais escuro ao passar o mouse
+        },
+    },
+    [theme.breakpoints.up('lg')]: {
+        width: '250px', // Largura maior em dispositivos grandes
+        height: '60px', // Altura maior em dispositivos grandes
+    },
+}));
 
 export function ListaEventos() {
     const navigate = useNavigate();
@@ -39,26 +66,24 @@ export function ListaEventos() {
     function load() {
         fetch('http://localhost:8080/evento', {
             method: 'GET'
-        }).then(response => {
-            return response.json();
-        }).then(data => {
-            setData(data);
-        }).catch(response => {
-            alert('Erro ao listar eventos!');
-            alert(response.status);
-        });
+        }).then(response => response.json())
+            .then(data => {
+                // Ordena os eventos pela data
+                const sortedData = data.sort((a, b) => new Date(a.data) - new Date(b.data));
+                setData(sortedData);
+            })
+            .catch(response => {
+                alert('Erro ao listar eventos!');
+                alert(response.status);
+            });
     }
 
     function deleteEvento(id) {
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
         }).then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao deletar evento!');
-            }
+            if (!response.ok) throw new Error('Erro ao deletar evento!');
             setOpen(true);
             setMessage("Evento deletado com sucesso");
             load();
@@ -68,82 +93,62 @@ export function ListaEventos() {
         });
     }
 
-    const colunas = [
-        { field: 'nome', headerName: 'Nome', flex: 1, minWidth: 100 },
-        { field: 'data', headerName: 'Data', flex: 1, minWidth: 100 },
-        {
-            field: 'editar',
-            headerName: 'Editar',
-            flex: 1,
-            minWidth: 100,
-            renderCell: (params) => (
-                <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Button variant="contained" color="primary" onClick={() => navigate(`/editaeventos/${params.id}`)}>Editar</Button>
-                </div>
-            )
-        },
-        {
-            field: 'excluir',
-            headerName: 'Excluir',
-            flex: 1,
-            minWidth: 100,
-            renderCell: (params) => (
-                <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Button variant="contained" color="error" onClick={() => deleteEvento(params.id)}>Excluir</Button>
-                </div>
-            )
-        }
-    ];
-
     return (
         <>
-        <NavBar></NavBar>
-        <div style={{padding: "5%"}}>
-            <IconButton onClick={() => navigate('/')} sx={{
-                            '&:hover': {
-                                color: 'primary.main'
-                            }
-                        }}>
-                        <ArrowBackIcon />
-                </IconButton>
-            
-            <Grid container style={{ height: '100%', width: '100%' }}>
-                
-                <Typography align='center' variant="h4" style={{ margin: '10px', color: 'black' }}>Meus eventos</Typography>
+            <NavBar />
+            <Container>
+                <ContentContainer>
+                    <Grid container alignItems="center" justifyContent="flex-start">
+                        <Grid item>
+                            <IconButton onClick={() => navigate('/')} sx={{ '&:hover': { color: 'primary.main' } }}>
+                                <ArrowBackIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
 
-                <Grid item xs={12} style={{ height: '100%' }}>
-                    <div style={{ height: '100%', width: '100%' }}>
-                        <DataGrid
-                            rows={data}
-                            columns={colunas}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: { page: 0, pageSize: 5 },
-                                },
-                            }}
-                            pageSizeOptions={[5, 10]}
-                            autoHeight
-                        />
-                        <Box display="flex" justifyContent="center" mt={2}>
-                            <Button 
-                                variant='contained' 
-                                sx={{ margin: '10px' }} 
-                                endIcon={<AddIcon />} 
-                                onClick={() => navigate('/cadastraeventos')}
-                            >
-                                Novo evento
-                            </Button>
-                        </Box>
-                    </div>
-                </Grid>
+                    <Typography align='center' variant="h4" style={{ margin: '10px', color: 'black' }}>Meus eventos</Typography>
+
+                    <Grid container direction="column" alignItems="center" spacing={3}>
+                        {data.map((evento) => (
+                            <Grid item key={evento.id} style={{ width: '100%' }}>
+                                <StyledPaper elevation={0}>
+                                    <Typography variant="h5">{evento.nome}</Typography> {/* Aumenta o tamanho do nome */}
+                                    <Typography variant="body2">{new Date(evento.data).toLocaleDateString()}</Typography>
+                                    <Box mt={2} display="flex" justifyContent="space-around">
+                                        <CustomButton variant="contained" color="primary" onClick={() => navigate(`/editaeventos/${evento.id}`)}>Editar</CustomButton> {/* Usa o botão personalizado */}
+                                        <CustomButton variant="contained" color="error" onClick={() => deleteEvento(evento.id)}>Excluir</CustomButton> {/* Usa o botão personalizado */}
+                                    </Box>
+                                </StyledPaper>
+                            </Grid>
+                        ))}
+                    </Grid>
+
+                    <Box display="flex" justifyContent="center" mt={2}>
+                        <Button
+                            variant='contained'
+                            sx={{ 
+                                margin: '10px', 
+                                borderRadius: '16px', 
+                                width: { xs: '200px', lg: '250px' }, // Largura maior em dispositivos grandes
+                                height: { xs: '50px', lg: '60px' }, // Altura maior em dispositivos grandes
+                                backgroundColor: '#4f8cff', 
+                                '&:hover': { backgroundColor: '#3b7adf' } 
+                            }} 
+                            endIcon={<AddIcon />}
+                            onClick={() => navigate('/cadastraeventos')}
+                        >
+                            Novo evento
+                        </Button>
+                    </Box>
+                </ContentContainer>
+
                 <Snackbar
                     open={open}
                     autoHideDuration={6000}
                     onClose={() => setOpen(false)}
                     message={message}
                 />
-            </Grid>
-        </div>
+            </Container>
         </>
     );
 }

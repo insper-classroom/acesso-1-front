@@ -19,6 +19,7 @@ function App() {
       
       
       <Router>
+        
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
           <div style={{ flex: 1, overflow: 'auto'}}>
             <Routes>

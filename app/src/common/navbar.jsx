@@ -3,6 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Button, Grid, AppBar, Toolbar, IconButton, Box, Menu, MenuList, MenuItem } from '@mui/material';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import MenuIcon from '@mui/icons-material/Menu';
+import { styled } from '@mui/material/styles';
+
+const StyledAppBar = styled(AppBar)({
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    height: '80px', // Increase the height of the AppBar
+});
+
+const StyledButton = styled(Button)({
+    fontWeight: 'bold',
+    fontSize: '16px',
+});
 
 export function NavBar() {
     const navigate = useNavigate();
@@ -23,7 +34,7 @@ export function NavBar() {
     }
 
     return (
-        <AppBar position='static'>
+        <StyledAppBar position='static'>
             <Toolbar>
                 <IconButton 
                     size='large' 
@@ -34,11 +45,11 @@ export function NavBar() {
                 >
                     <CelebrationIcon sx={{color: 'white'}}/>
                 </IconButton>
-                <Typography variant='h6' component='div' sx={{flexGrow: 1, display:{xs:'none',md:'flex'}}}> Helipa Eventos </Typography>
+                <Typography variant='h6' component='div' sx={{flexGrow: 1, display:{xs:'none',md:'flex'}, fontWeight: 'bold', fontSize: '24px'}}> Helipa Eventos </Typography>
                 <Box sx={{display:{xs:'none',md:'flex'}}}>
-                    <Button color='inherit' onClick={() => navigate('/')}>Home</Button>
-                    <Button color='inherit' onClick={() => navigate('/eventos')}>Meus Eventos</Button>
-                    <Button color='inherit' onClick={() => navigate('/cadastraeventos')}>Novo Evento</Button>
+                    <StyledButton color='inherit' onClick={() => navigate('/')}>Home</StyledButton>
+                    <StyledButton color='inherit' onClick={() => navigate('/eventos')}>Meus Eventos</StyledButton>
+                    <StyledButton color='inherit' onClick={() => navigate('/cadastraeventos')}>Novo Evento</StyledButton>
                 </Box>
                 <Box sx={{display:{xs:'flex',md:'none'}}}>
                     <IconButton size='large' edge='start' color='inherit' aria-label='menu' onClick={handleClick}>
@@ -67,8 +78,8 @@ export function NavBar() {
                 >
                     <CelebrationIcon sx={{color: 'white'}}/>
                 </IconButton>
-                <Typography variant='h6' component='div' sx={{flexGrow: 1, display:{xs:'flex',md:'none'}}}> Nome app </Typography>
+                <Typography variant='h6' component='div' sx={{flexGrow: 1, display:{xs:'flex',md:'none'}, fontWeight: 'bold', fontSize: '24px'}}> Nome app </Typography>
             </Toolbar>
-        </AppBar>
+        </StyledAppBar>
     );
 }

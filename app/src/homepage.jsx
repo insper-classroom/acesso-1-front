@@ -3,18 +3,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Typography, Button, Grid, Tooltip, Box, Paper } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTheme, styled } from '@mui/material/styles';
+import { NavBar } from './common/navbar';
+
+const MainContainer = styled(Grid)(({ theme }) => ({
+  minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+  display: 'grid',
+  gridTemplateRows: 'auto 1fr', // Duas linhas, a primeira para a NavBar e a segunda para o conteúdo
+}));
 
 const Container = styled(Grid)(({ theme }) => ({
-  minHeight: '100%', // Ensure the container takes the full viewport height
   background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
-  padding: theme.spacing(4),
+  padding: '0% 5% 5% 5%',
   textAlign: 'center',
-  margin: 0,
-  width: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   flexDirection: 'column', // Align items in column direction
+  overflow: 'auto', // Add scroll bar when content overflows
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
@@ -93,37 +98,40 @@ export function Home() {
   };
 
   return (
-    <Container container>
-      <ButtonContainer>
-        <Title variant="h2" style={{ color: 'black' }}>Home</Title>
-        <ActionButton variant="contained" onClick={() => navigate(`/eventos`)}>
-          Meus Eventos
-        </ActionButton>
-        <ActionButton variant="contained" onClick={() => navigate(`/cadastraeventos`)}>
-          Novo Evento
-        </ActionButton>
-        <ActionButton variant="contained" onClick={generateSignUpLink}>
-          Convidar Organizador
-        </ActionButton>
-        {signupLink && (
-          <>
-            <LinkContainer>
-              <Typography variant="body1" component="span" sx={{ wordBreak: 'break-all', marginBottom: 2, fontWeight: 'bold' }}>
-                <Link to={signupLink}>{signupLink}</Link>
+    <MainContainer container>
+      <NavBar />
+      <Container container>
+        <ButtonContainer>
+          <Title variant="h2" style={{ color: 'black' }}>Home</Title>
+          <ActionButton variant="contained" onClick={() => navigate(`/eventos`)}>
+            Meus Eventos
+          </ActionButton>
+          <ActionButton variant="contained" onClick={() => navigate(`/cadastraeventos`)}>
+            Novo Evento
+          </ActionButton>
+          <ActionButton variant="contained" onClick={generateSignUpLink}>
+            Convidar Organizador
+          </ActionButton>
+          {signupLink && (
+            <>
+              <LinkContainer>
+                <Typography variant="body1" component="span" sx={{ wordBreak: 'break-all', marginBottom: 2, fontWeight: 'bold' }}>
+                  <Link to={signupLink}>{signupLink}</Link>
+                </Typography>
+                <Button variant="outlined" onClick={() => copyToClipboard(signupLink)} style={{ fontWeight: 'bold' }}>
+                  <ContentCopyIcon />
+                </Button>
+                <StyledTooltip open={showCopiedTooltip} title="Copied!" placement="top">
+                  <span></span>
+                </StyledTooltip>
+              </LinkContainer>
+              <Typography variant="caption" color={'black'} fontSize={"16px"} sx={{ marginTop: 2, fontWeight: 'bold' }}>
+                Envie esse link para outro organizador se cadastrar
               </Typography>
-              <Button variant="outlined" onClick={() => copyToClipboard(signupLink)} style={{ fontWeight: 'bold' }}>
-                <ContentCopyIcon />
-              </Button>
-              <StyledTooltip open={showCopiedTooltip} title="Copied!" placement="top">
-                <span></span>
-              </StyledTooltip>
-            </LinkContainer>
-            <Typography variant="caption" color={'black'} fontSize={"16px"} sx={{ marginTop: 2, fontWeight: 'bold' }}>
-              Envie esse link para outro organizador se cadastrar
-            </Typography>
-          </>
-        )}
-      </ButtonContainer>
-    </Container>
+            </>
+          )}
+        </ButtonContainer>
+      </Container>
+    </MainContainer>
   );
 }
