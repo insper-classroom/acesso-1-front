@@ -21,7 +21,7 @@ const Container = styled('div')({
 });
 
 const ContentContainer = styled(Box)(({ theme }) => ({
-    background: 'rgba(255, 255, 255, 0.6)',
+    background: 'rgba(255, 255, 255, 0.7)',
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
     width: '100%',

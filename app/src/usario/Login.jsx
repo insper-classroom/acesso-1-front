@@ -18,7 +18,7 @@ const FormContainer = styled(Paper)(({ theme }) => ({
     padding: '30px 20px',
     width: '100%',
     maxWidth: '600px',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: '16px',
     display: 'flex',
     flexDirection: 'column',
