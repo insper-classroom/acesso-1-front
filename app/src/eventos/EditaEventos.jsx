@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+// Importações de componentes do Material UI
 import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar, Box, Tooltip } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,9 +13,10 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { styled } from '@mui/material/styles';
 import { NavBar } from '../common/navbar';
 
+// Estilização de componentes usando styled do Material UI
 const Container = styled('div')({
-    minHeight: '100vh', // Ensure the container takes the full viewport height
-    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Fundo gradiente azul mais claro
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -26,7 +28,7 @@ const FormContainer = styled(Paper)(({ theme }) => ({
     padding: '30px 20px',
     width: '100%',
     maxWidth: '600px',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Lighter background
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Fundo mais claro
     borderRadius: '16px',
     display: 'flex',
     flexDirection: 'column',
@@ -34,21 +36,21 @@ const FormContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const CustomButton = styled(Button)(({ theme }) => ({
-    borderRadius: '12px', // Round corners
+    borderRadius: '12px', // Cantos arredondados
     '&.MuiButton-containedPrimary': {
-        backgroundColor: '#4f8cff', // Custom blue color
+        backgroundColor: '#4f8cff', // Cor azul personalizada
         '&:hover': {
-            backgroundColor: '#3b7adf', // Darker shade on hover
+            backgroundColor: '#3b7adf', // Sombra mais escura ao passar o mouse
         },
     },
     '&.MuiButton-containedError': {
-        backgroundColor: '#ff4949', // Custom red color
+        backgroundColor: '#ff4949', // Cor vermelha personalizada
         '&:hover': {
-            backgroundColor: '#e63939', // Darker shade on hover
+            backgroundColor: '#e63939', // Sombra mais escura ao passar o mouse
         },
     },
     [theme.breakpoints.up('lg')]: {
-        width: '250px', // Larger size on larger screens
+        width: '250px', // Tamanho maior em telas maiores
         height: '60px',
     },
 }));
@@ -74,6 +76,7 @@ const MainContainer = styled(Grid)(({ theme }) => ({
 }));
 
 export function EditaEventos() {
+    // Gerenciamento de estado para os campos do formulário
     const handleChangeTipo = (event) => {
         setTipo(event.target.value);
     };
@@ -85,6 +88,7 @@ export function EditaEventos() {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState();
 
+    // Função para fechar o Snackbar
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -94,6 +98,7 @@ export function EditaEventos() {
 
     const token = localStorage.getItem('jwtToken');
 
+    // Ação do Snackbar, inclui um botão UNDO
     const action = (
         <Fragment>
             <Button color="secondary" size="small" onClick={handleClose}>
@@ -109,21 +114,25 @@ export function EditaEventos() {
         </Fragment>
     );
 
+    // Formatação da data para string no formato brasileiro
     const formatDateToString = (date) => {
         if (!date) return '';
-        return date.format('DD/MM/YYYY'); // Formato para português do Brasil
+        return date.format('DD/MM/YYYY');
     };
 
+    // Converte string de data para objeto Dayjs
     const formatStringToDate = (dateString) => {
         if (!dateString) return null;
         return dayjs(dateString, 'DD/MM/YYYY');
     };
 
+    // Formatação do horário para string no formato brasileiro
     const formatTimeToString = (time) => {
         if (!time) return '';
         return time.format('HH:mm');
     };
 
+    // Hook para acessar os parâmetros da URL
     const { id } = useParams();
     const [data, setData] = useState([]);
 
@@ -142,12 +151,15 @@ export function EditaEventos() {
 
     const navigate = useNavigate();
 
+    // Regiões pré-definidas para o campo de seleção
     const predefinedRegions = ['Heliópolis', 'Ipiranga', 'Sacomã', 'Cursino', 'Outro'];
 
+    // Carregar dados quando o componente é montado
     useEffect(() => {
         load();
     }, []);
 
+    // Função para carregar dados do evento do servidor
     function load() {
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'GET',
@@ -166,7 +178,7 @@ export function EditaEventos() {
             setRegiao(data.regiao);
             setPreco(data.preco);
             setDescricao(data.descricao);
-            setLinkEvento(data.link); // Ajuste aqui para garantir que linkEvento seja setado corretamente
+            setLinkEvento(data.link);
             setTelefone(data.telefone);
             setHorario(dayjs(data.horario, "HH:mm"));
         }).catch(response => {
@@ -175,6 +187,7 @@ export function EditaEventos() {
         });
     }
 
+    // Função para lidar com o clique no botão de salvar
     function click() {
         let dataEditada = {
             "nome": nome,
@@ -200,7 +213,7 @@ export function EditaEventos() {
             }
         }).then(response => {
             if (!response.ok) {
-                // error processing
+                // Tratamento de erro
                 throw new Error('Erro na edição do evento!');
             }
             setOpen(true);
@@ -213,6 +226,7 @@ export function EditaEventos() {
         });
     }
 
+    // Tooltip de descrição com informações detalhadas
     const descriptionTooltip = (
         <ul>
             <li>Descreva o evento de forma clara e concisa</li>
@@ -221,24 +235,30 @@ export function EditaEventos() {
         </ul>
     );
 
+    // Tooltip para o campo de telefone
     const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
 
     return (
         <MainContainer container>
+            {/* Componente de navegação */}
             <NavBar /> 
             <Grid item xs={12}>
                 <Container>
                     <FormContainer elevation={0}>
+                        {/* Botão para voltar à página de eventos */}
                         <IconButton onClick={() => navigate('/eventos')} sx={{ alignSelf: 'flex-start', '&:hover': { color: 'primary.main' } }}>
                             <ArrowBackIcon />
                         </IconButton>
+                        {/* Título do formulário */}
                         <Typography variant="h4" align="center" style={{ margin: '20px', color: 'black', fontWeight: 'bold' }}>Editar evento</Typography>
                         <Typography color="black" align="center">Preencha esse formulário para editar seu evento</Typography>
+                        {/* Formulário de edição de evento */}
                         <form action="" style={{ display: "flex", alignItems: "center", flexDirection: 'column', width: '100%' }}>
                             <CustomTextField fullWidth label='Nome do evento' value={nome} onChange={(event) => {
                                 setNome(event.target.value);
                             }} />
 
+                            {/* Campos de data e horário com suporte a internacionalização */}
                             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
                                 <CustomPaper elevation={0}>
                                     <DatePicker label="Data" slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white', borderRadius: '5px' } } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
@@ -248,10 +268,12 @@ export function EditaEventos() {
                                 </CustomPaper>
                             </LocalizationProvider>
 
+                            {/* Campo de endereço */}
                             <CustomTextField fullWidth label='Endereço' value={endereco} onChange={(event) => {
                                 setEndereco(event.target.value);
                             }} />
 
+                            {/* Campos de seleção de região e tipo de evento */}
                             <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
                                 <InputLabel>Região</InputLabel>
                                 <Select
@@ -286,30 +308,36 @@ export function EditaEventos() {
                                 </Select>
                             </FormControl>
 
+                            {/* Campo de preço */}
                             <CustomTextField fullWidth label='Preço' type='number' InputProps={{
                                 endAdornment: <InputAdornment position="start">R$</InputAdornment>
                             }} value={preco} onChange={(event) => {
                                 setPreco(event.target.value);
                             }} />
 
+                            {/* Campo de descrição com tooltip explicativo */}
                             <Tooltip title={descriptionTooltip} placement="top" arrow>
                                 <CustomTextField fullWidth label='Descrição' multiline rows={5} value={descricao} onChange={(event) => {
                                     setDescricao(event.target.value);
                                 }} />
                             </Tooltip>
 
+                            {/* Campo de telefone com tooltip de formatação */}
                             <Tooltip title={phoneTooltip} placement="top" arrow>
                                 <CustomTextField fullWidth label='Telefone' value={telefone} onChange={(event) => {
                                     setTelefone(event.target.value);
                                 }} />
                             </Tooltip>
 
+                            {/* Campo de link do evento */}
                             <CustomTextField fullWidth label="Link do Evento" value={linkEvento} onChange={(event) => {
                                 setLinkEvento(event.target.value);
                             }} />
 
+                            {/* Botão de submissão do formulário */}
                             <CustomButton variant="contained" color="primary" sx={{fontWeight:'bold'}} onClick={() => click()} endIcon={<SaveIcon />}>Salvar</CustomButton>
                         </form>
+                        {/* Snackbar para exibir mensagens de sucesso ou erro */}
                         <Snackbar
                             open={open}
                             autoHideDuration={3000}

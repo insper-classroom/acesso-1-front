@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+// Importações de componentes do Material UI
 import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar, Box, Tooltip } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -11,9 +12,10 @@ import 'dayjs/locale/pt-br';
 import { styled } from '@mui/material/styles';
 import { NavBar } from '../common/navbar';
 
+// Estilização de componentes usando styled do Material UI
 const Container = styled('div')({
-    minHeight: '100vh', // Ensure the container takes the full viewport height
-    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Fundo gradiente azul mais claro
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -25,7 +27,7 @@ const FormContainer = styled(Paper)(({ theme }) => ({
     padding: '30px 20px',
     width: '100%',
     maxWidth: '600px',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Lighter background
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Fundo mais claro
     borderRadius: '16px',
     display: 'flex',
     flexDirection: 'column',
@@ -33,21 +35,21 @@ const FormContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const CustomButton = styled(Button)(({ theme }) => ({
-    borderRadius: '12px', // Round corners
+    borderRadius: '12px', // Cantos arredondados
     '&.MuiButton-containedPrimary': {
-        backgroundColor: '#4f8cff', // Custom blue color
+        backgroundColor: '#4f8cff', // Cor azul personalizada
         '&:hover': {
-            backgroundColor: '#3b7adf', // Darker shade on hover
+            backgroundColor: '#3b7adf', // Sombra mais escura ao passar o mouse
         },
     },
     '&.MuiButton-containedError': {
-        backgroundColor: '#ff4949', // Custom red color
+        backgroundColor: '#ff4949', // Cor vermelha personalizada
         '&:hover': {
-            backgroundColor: '#e63939', // Darker shade on hover
+            backgroundColor: '#e63939', // Sombra mais escura ao passar o mouse
         },
     },
     [theme.breakpoints.up('lg')]: {
-        width: '250px', // Larger size on larger screens
+        width: '250px', // Tamanho maior em telas maiores
         height: '60px',
     },
 }));
@@ -67,12 +69,13 @@ const CustomPaper = styled(Paper)({
 });
 
 const MainContainer = styled(Grid)(({ theme }) => ({
-    minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+    minHeight: '100vh',
     display: 'grid',
     gridTemplateRows: 'auto 1fr', // Duas linhas, a primeira para a NavBar e a segunda para o conteúdo
 }));
 
 export function CadastraEvento() {
+    // Gerenciamento de estado para os campos do formulário
     const handleChangeTipo = (event) => {
         setTipo(event.target.value);
     };
@@ -81,27 +84,28 @@ export function CadastraEvento() {
         setRegiao(event.target.value);
     };
 
-    const [nome, setNome] = React.useState('');
-    const [organizador, setOrganizador] = React.useState('');
-    const [dataEvento, setDataEvento] = React.useState(null);
-    const [horario, setHorario] = React.useState(null);
-    const [tipo, setTipo] = React.useState('');
-    const [endereco, setEndereco] = React.useState('');
-    const [regiao, setRegiao] = React.useState('');
-    const [preco, setPreco] = React.useState('');
-    const [descricao, setDescricao] = React.useState('');
-    const [telefone, setTelefone] = React.useState('');
-    const [foto, setFoto] = React.useState('');
-    const [linkEvento, setLinkEvento] = React.useState('');
+    const [nome, setNome] = useState('');
+    const [organizador, setOrganizador] = useState('');
+    const [dataEvento, setDataEvento] = useState(null);
+    const [horario, setHorario] = useState(null);
+    const [tipo, setTipo] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [regiao, setRegiao] = useState('');
+    const [preco, setPreco] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [foto, setFoto] = useState('');
+    const [linkEvento, setLinkEvento] = useState('');
 
-    const [id, setId] = React.useState('');
-    const [data, setData] = React.useState([]);
+    const [id, setId] = useState('');
+    const [data, setData] = useState([]);
 
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
 
     const navigate = useNavigate();
 
+    // Função para fechar o Snackbar
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -112,6 +116,7 @@ export function CadastraEvento() {
 
     const token = localStorage.getItem('jwtToken');
 
+    // Ação do Snackbar, inclui um botão UNDO
     const action = (
         <Fragment>
             <Button color="secondary" size="small" onClick={handleClose}>
@@ -127,16 +132,19 @@ export function CadastraEvento() {
         </Fragment>
     );
 
+    // Formatação da data para string no formato brasileiro
     const formatDateToString = (date) => {
         if (!date) return '';
-        return date.format('DD/MM/YYYY'); // Format to Brazilian Portuguese
+        return date.format('DD/MM/YYYY');
     };
 
+    // Formatação do horário para string no formato brasileiro
     const formatTimeToString = (time) => {
         if (!time) return '';
-        return time.format('HH:mm'); // Format to Brazilian Portuguese
+        return time.format('HH:mm');
     };
 
+    // Input visualmente escondido para acessibilidade
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -149,10 +157,12 @@ export function CadastraEvento() {
         width: 1,
     });
 
+    // Carregar dados quando o componente é montado
     useEffect(() => {
         load(token);
     }, []);
 
+    // Função para carregar dados do servidor
     function load(token) {
         fetch(`http://localhost:8080/id/${token}`, {
             method: 'GET',
@@ -169,6 +179,7 @@ export function CadastraEvento() {
         });
     }
 
+    // Função para lidar com o clique no botão de cadastro
     function click(event) {
         event.preventDefault();
         let data = {
@@ -196,13 +207,12 @@ export function CadastraEvento() {
             }
         }).then(response => {
             if (!response.ok) {
-                // error processing
+                // Tratamento de erro
                 throw 'Error';
             }
             console.log(response);
             setOpen(true);
             setMessage("Evento cadastrado com sucesso!");
-            //load()
         }).catch(response => {
             setOpen(true);
             setMessage('Erro no cadastro do evento!');
@@ -211,6 +221,7 @@ export function CadastraEvento() {
         });
     }
 
+    // Tooltip de descrição com informações detalhadas
     const descriptionTooltip = (
         <ul>
             <li>Descreva o evento de forma clara e concisa</li>
@@ -219,25 +230,33 @@ export function CadastraEvento() {
         </ul>
     );
 
+    // Tooltip para o campo de telefone
     const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
 
     return (
         <MainContainer container>
-            <NavBar /> {/* Adding NavBar at the top */}
+            {/* Componente de navegação */}
+            <NavBar /> {/* Adicionando NavBar no topo */}
             <Grid item xs={12}>
                 <Container>
                     <FormContainer elevation={0}>
+                        {/* Botão para voltar à página anterior */}
                         <IconButton onClick={() => navigate('/')} sx={{ alignSelf: 'flex-start', '&:hover': { color: 'primary.main' } }}>
                             <ArrowBackIcon />
                         </IconButton>
+                        {/* Título do formulário */}
                         <Typography variant="h4" align="center" style={{ margin: '20px', color: 'black', fontWeight: 'bold' }}>Novo evento</Typography>
                         <Typography color="black" align="center">Preencha esse formulário para cadastrar um novo evento</Typography>
+                        
+                        {/* Formulário de cadastro de evento */}
                         <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }} onSubmit={click}>
                             <CustomTextField
                                 label='Nome do evento'
                                 value={nome}
                                 onChange={(event) => setNome(event.target.value)}
                             />
+                            
+                            {/* Campos de data e horário com suporte a internacionalização */}
                             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
                                 <CustomPaper elevation={0}>
                                     <DatePicker
@@ -258,11 +277,15 @@ export function CadastraEvento() {
                                     />
                                 </CustomPaper>
                             </LocalizationProvider>
+    
+                            {/* Campo de endereço */}
                             <CustomTextField
                                 label='Endereço'
                                 value={endereco}
                                 onChange={(event) => setEndereco(event.target.value)}
                             />
+    
+                            {/* Campos de seleção de região e tipo de evento */}
                             <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
                                 <InputLabel>Região</InputLabel>
                                 <Select
@@ -293,6 +316,8 @@ export function CadastraEvento() {
                                     <MenuItem value={'Outro'}>Outro</MenuItem>
                                 </Select>
                             </FormControl>
+    
+                            {/* Campo de preço */}
                             <CustomTextField
                                 label='Preço'
                                 type='number'
@@ -300,6 +325,8 @@ export function CadastraEvento() {
                                 value={preco}
                                 onChange={(event) => setPreco(event.target.value)}
                             />
+    
+                            {/* Campo de descrição com tooltip explicativo */}
                             <Tooltip title={descriptionTooltip} placement="top" arrow>
                                 <CustomTextField
                                     label='Descrição'
@@ -309,6 +336,8 @@ export function CadastraEvento() {
                                     onChange={(event) => setDescricao(event.target.value)}
                                 />
                             </Tooltip>
+    
+                            {/* Campo de telefone com tooltip de formatação */}
                             <Tooltip title={phoneTooltip} placement="top" arrow>
                                 <CustomTextField
                                     label='Telefone (Opcional)'
@@ -316,12 +345,16 @@ export function CadastraEvento() {
                                     onChange={(event) => setTelefone(event.target.value)}
                                 />
                             </Tooltip>
+    
+                            {/* Campo de link do evento */}
                             <CustomTextField
                                 label='Link do evento (Opcional)'
                                 value={linkEvento}
                                 onChange={(event) => setLinkEvento(event.target.value)}
                             />
-                            <Box >
+    
+                            {/* Botão de submissão do formulário */}
+                            <Box>
                                 <Button variant='contained' color="primary" endIcon={<SaveIcon />} type="submit" sx={{ 
                                         margin: '10px', 
                                         borderRadius: '16px', 
@@ -334,6 +367,8 @@ export function CadastraEvento() {
                             </Box>
                         </form>
                     </FormContainer>
+    
+                    {/* Snackbar para exibir mensagens de sucesso ou erro */}
                     <Snackbar
                         open={open}
                         autoHideDuration={6000}
@@ -345,4 +380,5 @@ export function CadastraEvento() {
             </Grid>
         </MainContainer>
     );
+    
 }
