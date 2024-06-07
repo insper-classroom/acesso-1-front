@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// Importações de componentes do Material UI
 import { Grid, Paper, Typography, Button, IconButton, Snackbar, Box } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -8,11 +9,12 @@ import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-dayjs.extend(customParseFormat);
+dayjs.extend(customParseFormat); // Extensão para parse de formatos customizados
 
+// Estilização de componentes usando styled do Material UI
 const Container = styled('div')({
-    minHeight: '100%',
-    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)',
+    minHeight: '100%', // Define a altura mínima como 100% da altura da viewport
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Fundo gradiente azul
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -21,7 +23,7 @@ const Container = styled('div')({
 });
 
 const ContentContainer = styled(Box)(({ theme }) => ({
-    background: 'rgba(255, 255, 255, 0.7)',
+    background: 'rgba(255, 255, 255, 0.7)', // Fundo mais claro
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
     width: '100%',
@@ -41,35 +43,36 @@ const CustomButton = styled(Button)(({ theme }) => ({
     fontWeight: 'bold',
     borderRadius: '12px',
     '&.MuiButton-containedPrimary': {
-        backgroundColor: '#4f8cff',
+        backgroundColor: '#4f8cff', // Cor azul personalizada
         '&:hover': {
-            backgroundColor: '#3b7adf',
+            backgroundColor: '#3b7adf', // Sombra mais escura ao passar o mouse
         },
     },
     '&.MuiButton-containedError': {
-        backgroundColor: '#ff4949',
+        backgroundColor: '#ff4949', // Cor vermelha personalizada
         '&:hover': {
-            backgroundColor: '#e63939',
+            backgroundColor: '#e63939', // Sombra mais escura ao passar o mouse
         },
     },
     [theme.breakpoints.up('lg')]: {
-        width: '250px',
+        width: '250px', // Tamanho maior em telas maiores
         height: '60px',
     },
 }));
 
 export function ListaEventos() {
-    const navigate = useNavigate();
-    const [data, setData] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [message, setMessage] = useState("");
-    const token = localStorage.getItem('jwtToken');
+    const navigate = useNavigate(); // Hook para navegação
+    const [data, setData] = useState([]); // Estado para armazenar os dados dos eventos
+    const [open, setOpen] = useState(false); // Estado para controlar a abertura do Snackbar
+    const [message, setMessage] = useState(""); // Estado para a mensagem do Snackbar
+    const token = localStorage.getItem('jwtToken'); // Recupera o token do localStorage
 
     useEffect(() => {
-        load();
+        load(); // Carrega os dados quando o componente é montado
     }, []);
 
     async function load() {
+        // Obtém o ID do usuário
         let id = await fetch(`http://localhost:8080/id/${token}`, {
             method: 'GET',
         }).then(response => response.text())
@@ -78,6 +81,7 @@ export function ListaEventos() {
             alert(response.status);
         });
 
+        // Busca os eventos do usuário
         fetch(`http://localhost:8080/eventos/${id}`, {
             method: 'GET',
             headers: {
@@ -85,6 +89,7 @@ export function ListaEventos() {
             }
         }).then(response => response.json())
         .then(data => {
+            // Ordena os eventos pela data
             const sortedData = data.sort((a, b) => {
                 const dateA = dayjs(a.data, 'DD/MM/YYYY');
                 const dateB = dayjs(b.data, 'DD/MM/YYYY');
@@ -97,6 +102,7 @@ export function ListaEventos() {
         });
     }
 
+    // Função para deletar um evento
     function deleteEvento(id) {
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'DELETE',
@@ -108,7 +114,7 @@ export function ListaEventos() {
             if (!response.ok) throw new Error('Erro ao deletar evento!');
             setOpen(true);
             setMessage("Evento deletado com sucesso");
-            load();
+            load(); // Recarrega os dados após a exclusão
         }).catch(error => {
             setOpen(true);
             setMessage('Erro ao deletar evento!');
@@ -117,11 +123,13 @@ export function ListaEventos() {
 
     return (
         <>
+            {/* Componente de navegação */}
             <NavBar />
             <Container>
                 <ContentContainer>
                     <Grid container alignItems="center" justifyContent="flex-start">
                         <Grid item>
+                            {/* Botão para voltar à página inicial */}
                             <IconButton onClick={() => navigate('/')} sx={{ '&:hover': { color: 'primary.main' } }}>
                                 <ArrowBackIcon />
                             </IconButton>
@@ -131,6 +139,7 @@ export function ListaEventos() {
                     <Typography align='center' variant="h4" style={{ margin: '10px 0px 20px 0px', color: 'black', fontWeight: 'bold'}}>Meus eventos</Typography>
 
                     <Grid container direction="column" alignItems="center" spacing={3}>
+                        {/* Mapeia os eventos e cria um card para cada um */}
                         {data.map((evento) => (
                             <Grid item key={evento.id} style={{ width: '100%' }}>
                                 <StyledPaper elevation={0}>
@@ -146,6 +155,7 @@ export function ListaEventos() {
                     </Grid>
 
                     <Box display="flex" justifyContent="center" mt={2}>
+                        {/* Botão para adicionar novo evento */}
                         <Button
                             variant='contained'
                             sx={{ 
@@ -165,6 +175,7 @@ export function ListaEventos() {
                     </Box>
                 </ContentContainer>
 
+                {/* Snackbar para exibir mensagens de sucesso ou erro */}
                 <Snackbar
                     open={open}
                     autoHideDuration={6000}
