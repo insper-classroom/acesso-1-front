@@ -6,6 +6,11 @@
 
 Front End em React JS + Vite
 
+## Login
+
+E-mail: avaliador@gmail.com
+Senha: 1234
+
 ## Descrição do Problema
 
 Os jovens de Heliópolis, durante seu tempo de lazer, ficam limitados à espaços dentro da comunidade. Entretanto, em uma região tão vasta, existem diversas oportunidades de lazer ao entorno do território, que podem ampliar essa população nas suas opções de diversão. Os pontos mais importantes observados pelo grupo foram a falta de incentivo à cultura e o desinteresse populacional, ponto crucial, dado que eventos acontecem a todo momento na região.
