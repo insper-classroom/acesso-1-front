@@ -21,7 +21,7 @@ Desenvolver um sistema onde organizadores de eventos possam cadastrar eventos po
 
 ## Instruções de Execução
 
-[Site do Deploy](www.helipaeventos.com.br)
+[Site do Deploy](https://acesso-1-front.vercel.app/)
 
 Caso queira testar em sua máquina:
 
@@ -42,8 +42,8 @@ Esta é a interface front-end de uma plataforma que permite aos organizadores ca
 
 ## Slides e Back Log
 
-1. [Slides usados na Apresentação do Projeto](https://www.canva.com/design/DAGHde_rdRk/5zpKa41VQEeIy4j-Ag62dw/edit?utm_content=DAGHde_rdRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-2. [Organização no Notion](https://www.notion.so/Helipa-Eventos-c256e1219d024f8a9d281c8283d464b7)
+1. [Slides usados na Apresentação do Projeto](https://www.canva.com/design/DAGHde_rdRk/5zpKa41VQEeIy4j-Ag62dw/edit?utm_content=DAGHde_rdRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton);
+2. [Organização no Notion](https://www.notion.so/Helipa-Eventos-c256e1219d024f8a9d281c8283d464b7).
 
 ## Referências
 
