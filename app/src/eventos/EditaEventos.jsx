@@ -9,12 +9,71 @@ import 'dayjs/locale/pt-br';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { styled } from '@mui/material/styles';
+import { NavBar } from '../common/navbar';
+
+const Container = styled('div')({
+    minHeight: '100vh', // Ensure the container takes the full viewport height
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '5%',
+});
+
+const FormContainer = styled(Paper)(({ theme }) => ({
+    padding: '30px 20px',
+    width: '100%',
+    maxWidth: '600px',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Lighter background
+    borderRadius: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+}));
+
+const CustomButton = styled(Button)(({ theme }) => ({
+    borderRadius: '12px', // Round corners
+    '&.MuiButton-containedPrimary': {
+        backgroundColor: '#4f8cff', // Custom blue color
+        '&:hover': {
+            backgroundColor: '#3b7adf', // Darker shade on hover
+        },
+    },
+    '&.MuiButton-containedError': {
+        backgroundColor: '#ff4949', // Custom red color
+        '&:hover': {
+            backgroundColor: '#e63939', // Darker shade on hover
+        },
+    },
+    [theme.breakpoints.up('lg')]: {
+        width: '250px', // Larger size on larger screens
+        height: '60px',
+    },
+}));
+
+const CustomTextField = styled(TextField)({
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    width: '100%'
+});
+
+const CustomPaper = styled(Paper)({
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    width: '100%',
+});
+
+const MainContainer = styled(Grid)(({ theme }) => ({
+    minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+    display: 'grid',
+    gridTemplateRows: 'auto 1fr', // Duas linhas, a primeira para a NavBar e a segunda para o conteúdo
+}));
 
 export function EditaEventos() {
-    const paperStyle = { padding: '30px 20px', width: "100%" };
-    const gridStyle = { margin: '10px' };
-    const formStyle = { margin: '10px' };
-
     const handleChangeTipo = (event) => {
         setTipo(event.target.value);
     };
@@ -49,7 +108,6 @@ export function EditaEventos() {
             </IconButton>
         </Fragment>
     );
-
 
     const formatDateToString = (date) => {
         if (!date) return '';
@@ -129,7 +187,8 @@ export function EditaEventos() {
             "organizador": organizador,
             "foto": foto,
             "horario": formatTimeToString(horario),
-            "linkEvento": linkEvento
+            "link": linkEvento,
+            "telefone": telefone
         }
 
         fetch(`http://localhost:8080/evento/${id}`, {
@@ -165,113 +224,102 @@ export function EditaEventos() {
     const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
 
     return (
-        <div style={{padding: "5%"}}>
-            <IconButton onClick={() => navigate('/eventos')} sx={{
-                        '&:hover': {
-                            color: 'primary.main'
-                        }
-                    }}>
-                    <ArrowBackIcon />
-            </IconButton>
-            <Grid container alignItems="center" style={gridStyle}>
-                <h2 style={{ color: 'black', textAlign: 'center', margin: '20px', flex: 1 }}>Editar evento</h2>
+        <MainContainer container>
+            <NavBar /> 
+            <Grid item xs={12}>
+                <Container>
+                    <FormContainer elevation={0}>
+                        <IconButton onClick={() => navigate('/eventos')} sx={{ alignSelf: 'flex-start', '&:hover': { color: 'primary.main' } }}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography variant="h4" align="center" style={{ margin: '20px', color: 'black', fontWeight: 'bold' }}>Editar evento</Typography>
+                        <Typography color="black" align="center">Preencha esse formulário para editar seu evento</Typography>
+                        <form action="" style={{ display: "flex", alignItems: "center", flexDirection: 'column', width: '100%' }}>
+                            <CustomTextField fullWidth label='Nome do evento' value={nome} onChange={(event) => {
+                                setNome(event.target.value);
+                            }} />
+
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
+                                <CustomPaper elevation={0}>
+                                    <DatePicker label="Data" slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white', borderRadius: '5px' } } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
+                                </CustomPaper>
+                                <CustomPaper elevation={0}>
+                                    <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)} slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white', borderRadius: '5px' } } }}/>
+                                </CustomPaper>
+                            </LocalizationProvider>
+
+                            <CustomTextField fullWidth label='Endereço' value={endereco} onChange={(event) => {
+                                setEndereco(event.target.value);
+                            }} />
+
+                            <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
+                                <InputLabel>Região</InputLabel>
+                                <Select
+                                    value={regiao}
+                                    onChange={handleChangeRegiao}
+                                    label="Região"
+                                >
+                                    {predefinedRegions.map((region) => (
+                                        <MenuItem key={region} value={region}>
+                                            {region}
+                                        </MenuItem>
+                                    ))}
+                                    {!predefinedRegions.includes(regiao) && (
+                                        <MenuItem value={regiao}>{regiao}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
+                                <InputLabel>Tipo</InputLabel>
+                                <Select
+                                    value={tipo}
+                                    onChange={handleChangeTipo}
+                                    label="Tipo"
+                                >
+                                    <MenuItem value={'Festa'}>Festa</MenuItem>
+                                    <MenuItem value={'Cultural'}>Cultural</MenuItem>
+                                    <MenuItem value={'Esportivo'}>Esportivo</MenuItem>
+                                    <MenuItem value={'Religioso'}>Religioso</MenuItem>
+                                    <MenuItem value={'Educacional'}>Educacional</MenuItem>
+                                    <MenuItem value={'Acadêmico'}>Acadêmico</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            <CustomTextField fullWidth label='Preço' type='number' InputProps={{
+                                endAdornment: <InputAdornment position="start">R$</InputAdornment>
+                            }} value={preco} onChange={(event) => {
+                                setPreco(event.target.value);
+                            }} />
+
+                            <Tooltip title={descriptionTooltip} placement="top" arrow>
+                                <CustomTextField fullWidth label='Descrição' multiline rows={5} value={descricao} onChange={(event) => {
+                                    setDescricao(event.target.value);
+                                }} />
+                            </Tooltip>
+
+                            <Tooltip title={phoneTooltip} placement="top" arrow>
+                                <CustomTextField fullWidth label='Telefone' value={telefone} onChange={(event) => {
+                                    setTelefone(event.target.value);
+                                }} />
+                            </Tooltip>
+
+                            <CustomTextField fullWidth label="Link do Evento" value={linkEvento} onChange={(event) => {
+                                setLinkEvento(event.target.value);
+                            }} />
+
+                            <CustomButton variant="contained" color="primary" sx={{fontWeight:'bold'}} onClick={() => click()} endIcon={<SaveIcon />}>Salvar</CustomButton>
+                        </form>
+                        <Snackbar
+                            open={open}
+                            autoHideDuration={3000}
+                            onClose={handleClose}
+                            message={message}
+                            action={action}
+                        />
+                    </FormContainer>
+                </Container>
             </Grid>
-            <Grid style={gridStyle}>
-                <Typography color={'black'}>Preencha esse formulário para editar seu evento</Typography>
-            </Grid>
-            <form action="" style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: 'column',
-                backgroundColor: "#f0f0f0", 
-                padding: "20px", 
-                borderRadius: "10px" 
-            }}>
-                <TextField fullWidth label='Nome do evento' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={nome} onChange={(event) => {
-                    setNome(event.target.value);
-                }} />
-
-                <Grid style={formStyle}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white' } } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
-                    </LocalizationProvider>
-                </Grid>
-
-                <Grid style={formStyle}>
-                    <Paper style={{backgroundColor: 'white', borderRadius: '5px', boxShadow: 'none'}}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                            <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)}/>
-                        </LocalizationProvider>
-                    </Paper>
-                </Grid>
-
-                <TextField fullWidth label='Endereço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={endereco} onChange={(event) => {
-                    setEndereco(event.target.value);
-                }} />
-
-                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
-                    <InputLabel>Região</InputLabel>
-                    <Select
-                        value={regiao}
-                        onChange={handleChangeRegiao}
-                        label="Região"
-                    >
-                        {predefinedRegions.map((region) => (
-                            <MenuItem key={region} value={region}>
-                                {region}
-                            </MenuItem>
-                        ))}
-                        {!predefinedRegions.includes(regiao) && (
-                            <MenuItem value={regiao}>{regiao}</MenuItem>
-                        )}
-                    </Select>
-                </FormControl>
-
-                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
-                    <InputLabel>Tipo</InputLabel>
-                    <Select
-                        value={tipo}
-                        onChange={handleChangeTipo}
-                        label="Tipo"
-                    >
-                        <MenuItem value={'Festa'}>Festa</MenuItem>
-                        <MenuItem value={'Cultural'}>Cultural</MenuItem>
-                        <MenuItem value={'Esportivo'}>Esportivo</MenuItem>
-                        <MenuItem value={'Religioso'}>Religioso</MenuItem>
-                        <MenuItem value={'Educacional'}>Educacional</MenuItem>
-                        <MenuItem value={'Acadêmico'}>Acadêmico</MenuItem>
-                    </Select>
-                </FormControl>
-
-                <TextField fullWidth label='Preço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} type='number' InputProps={{
-                    endAdornment: <InputAdornment position="start">R$</InputAdornment>
-                }} value={preco} onChange={(event) => {
-                    setPreco(event.target.value);
-                }} />
-
-                <Tooltip title={descriptionTooltip} placement="top" arrow>
-                    <TextField fullWidth label='Descrição' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} multiline rows={5} value={descricao} onChange={(event) => {
-                        setDescricao(event.target.value);
-                    }} />
-                </Tooltip>
-
-                <TextField fullWidth label='Telefone' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={telefone} onChange={(event) => {
-                    setTelefone(event.target.value);
-                }} />
-
-                <TextField fullWidth label="Link do Evento" style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={linkEvento} onChange={(event) => {
-                    setLinkEvento(event.target.value);
-                }} />
-
-                <Button variant="contained" onClick={() => click()} style={formStyle} endIcon={<SaveIcon />}>Salvar</Button>
-            </form>
-            <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                message={message}
-                action={action}
-            />
-        </div>
+        </MainContainer>
     );
 }

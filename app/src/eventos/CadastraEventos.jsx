@@ -6,16 +6,73 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'dayjs/locale/pt-br';
 import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { NavBar } from '../common/navbar';
+
+const Container = styled('div')({
+    minHeight: '100vh', // Ensure the container takes the full viewport height
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '5%',
+});
+
+const FormContainer = styled(Paper)(({ theme }) => ({
+    padding: '30px 20px',
+    width: '100%',
+    maxWidth: '600px',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Lighter background
+    borderRadius: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+}));
+
+const CustomButton = styled(Button)(({ theme }) => ({
+    borderRadius: '12px', // Round corners
+    '&.MuiButton-containedPrimary': {
+        backgroundColor: '#4f8cff', // Custom blue color
+        '&:hover': {
+            backgroundColor: '#3b7adf', // Darker shade on hover
+        },
+    },
+    '&.MuiButton-containedError': {
+        backgroundColor: '#ff4949', // Custom red color
+        '&:hover': {
+            backgroundColor: '#e63939', // Darker shade on hover
+        },
+    },
+    [theme.breakpoints.up('lg')]: {
+        width: '250px', // Larger size on larger screens
+        height: '60px',
+    },
+}));
+
+const CustomTextField = styled(TextField)({
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    width: '100%'
+});
+
+const CustomPaper = styled(Paper)({
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    width: '100%',
+});
+
+const MainContainer = styled(Grid)(({ theme }) => ({
+    minHeight: '100vh', // Define a altura mínima como 100% da altura da viewport
+    display: 'grid',
+    gridTemplateRows: 'auto 1fr', // Duas linhas, a primeira para a NavBar e a segunda para o conteúdo
+}));
 
 export function CadastraEvento() {
-    const paperStyle = { padding: '30px 20px', width: "100%", backgroundColor: "#f0f0f0" };
-    const gridStyle = { margin: '10px' };
-    const formStyle = { margin: '10px' };
-
     const handleChangeTipo = (event) => {
         setTipo(event.target.value);
     };
@@ -24,25 +81,24 @@ export function CadastraEvento() {
         setRegiao(event.target.value);
     };
 
-    const [nome, setNome] = React.useState();
-    const [organizador, setOrganizador] = React.useState();
-    const [dataEvento, setDataEvento] = React.useState();
-    const [horario, setHorario] = React.useState();
+    const [nome, setNome] = React.useState('');
+    const [organizador, setOrganizador] = React.useState('');
+    const [dataEvento, setDataEvento] = React.useState(null);
+    const [horario, setHorario] = React.useState(null);
     const [tipo, setTipo] = React.useState('');
-    const [endereco, setEndereco] = React.useState();
-    const [regiao, setRegiao] = React.useState();
-    const [preco, setPreco] = React.useState();
-    const [descricao, setDescricao] = React.useState();
-    const [telefone, setTelefone] = React.useState();
-    const [foto, setFoto] = React.useState();
-    const [linkEvento, setLinkEvento] = React.useState();
+    const [endereco, setEndereco] = React.useState('');
+    const [regiao, setRegiao] = React.useState('');
+    const [preco, setPreco] = React.useState('');
+    const [descricao, setDescricao] = React.useState('');
+    const [telefone, setTelefone] = React.useState('');
+    const [foto, setFoto] = React.useState('');
+    const [linkEvento, setLinkEvento] = React.useState('');
 
-    const [id, setId] = React.useState();
+    const [id, setId] = React.useState('');
     const [data, setData] = React.useState([]);
 
     const [open, setOpen] = useState(false);
-
-    const [message, setMessage] = useState();
+    const [message, setMessage] = useState('');
 
     const navigate = useNavigate();
 
@@ -73,12 +129,12 @@ export function CadastraEvento() {
 
     const formatDateToString = (date) => {
         if (!date) return '';
-        return date.format('DD/MM/YYYY'); // Formato para português do Brasil
+        return date.format('DD/MM/YYYY'); // Format to Brazilian Portuguese
     };
 
     const formatTimeToString = (time) => {
         if (!time) return '';
-        return time.format('HH:mm'); // Formato para português do Brasil
+        return time.format('HH:mm'); // Format to Brazilian Portuguese
     };
 
     const VisuallyHiddenInput = styled('input')({
@@ -112,9 +168,9 @@ export function CadastraEvento() {
             console.log(data);
         });
     }
-    
 
-    function click() {
+    function click(event) {
+        event.preventDefault();
         let data = {
             "nome": nome,
             "organizador": "organizador",
@@ -136,7 +192,7 @@ export function CadastraEvento() {
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':token,
+                'Authorization': token,
             }
         }).then(response => {
             if (!response.ok) {
@@ -166,105 +222,127 @@ export function CadastraEvento() {
     const phoneTooltip = "O formato deve ser (DD)XXXXXXXXX";
 
     return (
-        <div style={{padding: "5%"}}>
-            <IconButton onClick={() => navigate('/')} sx={{
-                '&:hover': {
-                    color: 'primary.main'
-                }
-            }}>
-                <ArrowBackIcon />
-            </IconButton>
-            <Grid style={gridStyle}>
-                <h2 style={{ color: 'black', textAlign: 'center', margin: '20px' }}>Novo evento</h2>
-                <Typography color={'black'}>Preencha esse formulário para cadastrar um novo evento</Typography>
+        <MainContainer container>
+            <NavBar /> {/* Adding NavBar at the top */}
+            <Grid item xs={12}>
+                <Container>
+                    <FormContainer elevation={0}>
+                        <IconButton onClick={() => navigate('/')} sx={{ alignSelf: 'flex-start', '&:hover': { color: 'primary.main' } }}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography variant="h4" align="center" style={{ margin: '20px', color: 'black', fontWeight: 'bold' }}>Novo evento</Typography>
+                        <Typography color="black" align="center">Preencha esse formulário para cadastrar um novo evento</Typography>
+                        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }} onSubmit={click}>
+                            <CustomTextField
+                                label='Nome do evento'
+                                value={nome}
+                                onChange={(event) => setNome(event.target.value)}
+                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
+                                <CustomPaper elevation={0}>
+                                    <DatePicker
+                                        label="Data"
+                                        value={dataEvento}
+                                        onChange={(newValue) => setDataEvento(newValue)}
+                                        renderInput={(params) => <TextField {...params} fullWidth style={{ backgroundColor: 'white', borderRadius: '5px' }} />}
+                                        slotProps={{ textField: { fullWidth: true } }}
+                                    />
+                                </CustomPaper>
+                                <CustomPaper elevation={0}>
+                                    <TimePicker
+                                        label="Horário"
+                                        value={horario}
+                                        onChange={(newValue) => setHorario(newValue)}
+                                        renderInput={(params) => <TextField {...params} fullWidth style={{ backgroundColor: 'white', borderRadius: '5px'}} />}
+                                        slotProps={{ textField: { fullWidth: true } }}
+                                    />
+                                </CustomPaper>
+                            </LocalizationProvider>
+                            <CustomTextField
+                                label='Endereço'
+                                value={endereco}
+                                onChange={(event) => setEndereco(event.target.value)}
+                            />
+                            <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
+                                <InputLabel>Região</InputLabel>
+                                <Select
+                                    value={regiao}
+                                    onChange={handleChangeRegiao}
+                                    label="Região"
+                                >
+                                    <MenuItem value={'Heliópolis'}>Heliópolis</MenuItem>
+                                    <MenuItem value={'Ipiranga'}>Ipiranga</MenuItem>
+                                    <MenuItem value={'Sacomã'}>Sacomã</MenuItem>
+                                    <MenuItem value={'Cursino'}>Cursino</MenuItem>
+                                    <MenuItem value={'Outro'}>Outro</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
+                                <InputLabel>Tipo</InputLabel>
+                                <Select
+                                    value={tipo}
+                                    onChange={handleChangeTipo}
+                                    label="Tipo"
+                                >
+                                    <MenuItem value={'Festa'}>Festa</MenuItem>
+                                    <MenuItem value={'Cultural'}>Cultural</MenuItem>
+                                    <MenuItem value={'Esportivo'}>Esportivo</MenuItem>
+                                    <MenuItem value={'Religioso'}>Religioso</MenuItem>
+                                    <MenuItem value={'Educacional'}>Educacional</MenuItem>
+                                    <MenuItem value={'Acadêmico'}>Acadêmico</MenuItem>
+                                    <MenuItem value={'Outro'}>Outro</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <CustomTextField
+                                label='Preço'
+                                type='number'
+                                InputProps={{ endAdornment: <InputAdornment position="start">R$</InputAdornment> }}
+                                value={preco}
+                                onChange={(event) => setPreco(event.target.value)}
+                            />
+                            <Tooltip title={descriptionTooltip} placement="top" arrow>
+                                <CustomTextField
+                                    label='Descrição'
+                                    multiline
+                                    rows={5}
+                                    value={descricao}
+                                    onChange={(event) => setDescricao(event.target.value)}
+                                />
+                            </Tooltip>
+                            <Tooltip title={phoneTooltip} placement="top" arrow>
+                                <CustomTextField
+                                    label='Telefone'
+                                    value={telefone}
+                                    onChange={(event) => setTelefone(event.target.value)}
+                                />
+                            </Tooltip>
+                            <CustomTextField
+                                label='Link do evento'
+                                value={linkEvento}
+                                onChange={(event) => setLinkEvento(event.target.value)}
+                            />
+                            <Box >
+                                <Button variant='contained' color="primary" endIcon={<SaveIcon />} type="submit" sx={{ 
+                                        margin: '10px', 
+                                        borderRadius: '16px', 
+                                        width: { xs: '200px', lg: '250px' }, 
+                                        height: { xs: '50px', lg: '60px' }, 
+                                        backgroundColor: '#4f8cff', 
+                                        fontWeight: 'bold',
+                                        '&:hover': { backgroundColor: '#3b7adf' } 
+                                    }}>Cadastrar</Button>
+                            </Box>
+                        </form>
+                    </FormContainer>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={6000}
+                        onClose={handleClose}
+                        message={message}
+                        action={action}
+                    ></Snackbar>
+                </Container>
             </Grid>
-            <form style={{ display: "flex", alignItems: "center", flexDirection: 'column', backgroundColor: "#f0f0f0", padding: "20px", borderRadius: "10px" }} onSubmit={click}>
-                <TextField fullWidth label='Nome do evento' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={nome} onChange={(event) => {
-                    setNome(event.target.value);
-                }} />
-
-                <Grid style={{ margin: '10px' }}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                        <DatePicker label="Data" slotProps={{ textField: { fullWidth: true, style: { backgroundColor: 'white' } } }} value={dataEvento} onChange={(newValue) => setDataEvento(newValue)} />
-
-                    </LocalizationProvider>
-
-                </Grid>
-                <Grid style={{ margin: '10px' }}>
-                    <Paper style={{backgroundColor: 'white', borderRadius: '5px', boxShadow: 'none'}}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-                            <TimePicker label="Horário" value={horario} onChange={(newValue) => setHorario(newValue)} />
-                        </LocalizationProvider>
-                    </Paper>
-                </Grid>
-
-                <TextField fullWidth label='Endereço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={endereco} onChange={(event) => {
-                    setEndereco(event.target.value);
-                }} />
-                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
-                    <InputLabel>Região</InputLabel>
-                    <Select
-                        value={regiao}
-                        onChange={handleChangeRegiao}
-                        label="Regiao"
-
-                    >
-                        <MenuItem value={'Heliópolis'}>Heliópolis</MenuItem>
-                        <MenuItem value={'Ipiranga'}>Ipiranga</MenuItem>
-                        <MenuItem value={'Sacomã'}>Sacomã</MenuItem>
-                        <MenuItem value={'Cursino'}>Cursino</MenuItem>
-                        <MenuItem value={'Outro'}>Outro</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl fullWidth style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }}>
-                    <InputLabel>Tipo</InputLabel>
-                    <Select
-                        value={tipo}
-                        onChange={handleChangeTipo}
-                        label="Tipo"
-
-                    >
-                        <MenuItem value={'Festa'}>Festa</MenuItem>
-                        <MenuItem value={'Cultural'}>Cultural</MenuItem>
-                        <MenuItem value={'Esportivo'}>Esportivo</MenuItem>
-                        <MenuItem value={'Religioso'}>Religioso</MenuItem>
-                        <MenuItem value={'Educacional'}>Educacional</MenuItem>
-                        <MenuItem value={'Acadêmico'}>Acadêmico</MenuItem>
-                        <MenuItem value={'Outro'}>Outro</MenuItem>
-                    </Select>
-                </FormControl>
-                <TextField fullWidth label='Preço' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} type='number' InputProps={{
-                    endAdornment: <InputAdornment position="start">R$</InputAdornment>
-                }} value={preco} onChange={(event) => {
-                    setPreco(event.target.value);
-                }} />
-                <Tooltip title={descriptionTooltip} placement="top" arrow>
-                    <TextField fullWidth label='Descrição' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} multiline rows={5} value={descricao} onChange={(event) => {
-                        setDescricao(event.target.value);
-                    }} />
-                </Tooltip>
-                <Tooltip title={phoneTooltip} placement="top" arrow>
-                    <TextField fullWidth label='Telefone' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={telefone} onChange={(event) => {
-                        setTelefone(event.target.value);
-                    }} />
-                </Tooltip>
-
-                <TextField fullWidth label='Link do evento' style={{ margin: '10px', backgroundColor: 'white', borderRadius: '5px' }} value={linkEvento} onChange={(event) => {
-                    setLinkEvento(event.target.value);
-                }} />
-
-                <Box sx={{ margin: '10px' }}>
-                    <Button variant='contained' color="primary" endIcon={<SaveIcon />} type="submit">Cadastrar</Button>
-                </Box>
-            </form>
-
-            <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                message={message}
-                action={action}
-            ></Snackbar>
-        </div>
+        </MainContainer>
     );
 }

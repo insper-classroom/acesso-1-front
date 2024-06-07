@@ -38,20 +38,11 @@ const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '18px', // Increased font size
   fontWeight: 'bold',
   textTransform: 'capitalize', // Capitalize the first letter
+  boxShadow: 'none', // Remove box shadow
   '&:hover': {
     backgroundColor: '#1e90ff', // Darker blue on hover
   },
 }));
-
-const token = localStorage.getItem('jwtToken');
-    if (!token) {
-      console.error('Token não encontrado. Faça login novamente.');
-      return navigate('/login');
-    }
-
-    const handleTooltipClose = () => {
-        setShowCopiedTooltip(false);
-    };
 
 const LinkContainer = styled(Paper)(({ theme }) => ({
   display: 'flex',
@@ -65,6 +56,8 @@ const LinkContainer = styled(Paper)(({ theme }) => ({
   width: '250px', // Match the button width
   maxWidth: '600px', // Max width to prevent it from getting too large
   fontWeight: 'bold',
+  borderRadius: '12px', // More rounded corners
+  boxShadow: 'none', // Remove box shadow
 }));
 
 const StyledTooltip = styled(Tooltip)(({ theme }) => ({
@@ -78,6 +71,7 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  boxShadow: 'none', // Remove box shadow
 }));
 
 export function Home() {
@@ -85,6 +79,15 @@ export function Home() {
   const theme = useTheme();
   const [signupLink, setSignupLink] = useState('');
   const [showCopiedTooltip, setShowCopiedTooltip] = useState(false);
+  const token = localStorage.getItem('jwtToken');
+  if (!token) {
+    console.error('Token não encontrado. Faça login novamente.');
+    return navigate('/login');
+  }
+
+  const handleTooltipClose = () => {
+    setShowCopiedTooltip(false);
+  };
 
   const generateSignUpLink = async () => {
     try {

@@ -1,70 +1,80 @@
 import React, { Fragment, useState } from 'react';
-import { FormGroup, FormControl, InputLabel, Input, Grid, Paper, Typography, TextField, InputAdornment, Button, Select, MenuItem, IconButton, Snackbar, Box, Tooltip } from "@mui/material";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import SaveIcon from '@mui/icons-material/Save';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate, useParams } from 'react-router-dom';
-import 'dayjs/locale/pt-br';
+import { Grid, Paper, Typography, TextField, Button, IconButton, Snackbar, Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
+
+const Container = styled('div')({
+    minHeight: '100vh',
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '5%',
+});
+
+const FormContainer = styled(Paper)(({ theme }) => ({
+    padding: '30px 20px',
+    width: '100%',
+    maxWidth: '600px',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+}));
+
+const CustomButton = styled(Button)(({ theme }) => ({
+    borderRadius: '12px',
+    '&.MuiButton-containedPrimary': {
+        backgroundColor: '#4f8cff',
+        '&:hover': {
+            backgroundColor: '#3b7adf',
+        },
+    },
+    '&.MuiButton-containedError': {
+        backgroundColor: '#ff4949',
+        '&:hover': {
+            backgroundColor: '#e63939',
+        },
+    },
+    [theme.breakpoints.up('lg')]: {
+        width: '250px',
+        height: '60px',
+    },
+}));
+
+const CustomTextField = styled(TextField)({
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    width: '100%'
+});
 
 export function Login() {
-    const gridStyle = { margin: '10px' };
-    const formStyle = { margin: '10px' };
-
-    const handleChangeTipo = (event) => {
-        setTipo(event.target.value);
-    };
-
-    const saveToken = (token) => {
-        localStorage.setItem('jwtToken', token);
-      };
-
-    const handleChangeRegiao = (event) => {
-        setRegiao(event.target.value);
-    };
-
-    const [email, setEmail] = React.useState();
-    const [senha, setSenha] = React.useState();
-
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
     const [open, setOpen] = useState(false);
-
-    const [message, setMessage] = useState();
-
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
     };
 
-    const action = (
-        <Fragment>
-            <Button color="secondary" size="small" onClick={handleClose}>
-                UNDO
-            </Button>
-            <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleClose}
-            >
-            </IconButton>
-        </Fragment>
-    );
+    const saveToken = (token) => {
+        localStorage.setItem('jwtToken', token);
+    };
 
-
-    function click() {
+    const click = () => {
         let data = {
-            "email": email,
-            "senha": senha
-        }
+            email: email,
+            senha: senha
+        };
 
         fetch('http://localhost:8080/login', {
             method: 'POST',
@@ -74,8 +84,7 @@ export function Login() {
             }
         }).then(response => {
             if (!response.ok) {
-                // error processing
-                throw 'Error';
+                throw new Error('Error');
             }
             return response.text();
         }).then(data => {
@@ -83,44 +92,39 @@ export function Login() {
             setMessage("Login feito com sucesso!");
             navigate('/');
             saveToken(data);
-            console.log(data);
-            //load()
-        }).catch(response => {
+        }).catch(() => {
             setOpen(true);
             setMessage('Erro no login!');
         });
-    }
+    };
+
+    const action = (
+        <Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+                UNDO
+            </Button>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+            </IconButton>
+        </Fragment>
+    );
 
     return (
-        <>
-            <Grid style={gridStyle}>
-                <h2 style={{ color: 'black', textAlign: 'center', margin: '20px' }}>Login</h2>
-            </Grid>
-            <form action="" style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: 'column',
-            }}>
-                <TextField fullWidth label='Email' style={formStyle} value={email} onChange={(event) => {
-                    setEmail(event.target.value);
-                }} />
-                <TextField fullWidth label='Senha' style={formStyle} value={senha} onChange={(event) => {
-                    setSenha(event.target.value);
-                }} />
-                
-
-                <Box sx={{ margin: '10px' }}>
-                    <Button variant='contained' onClick={() => click(0)}>Login</Button>
-                </Box>
-            </form>
-
-            <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                message={message}
-                action={action}
-            ></Snackbar>
-        </>
+        <Container>
+            <FormContainer elevation={0}>
+                <Typography variant="h4" align="center" style={{ margin: '20px', color: 'black', fontWeight: 'bold' }}>Login</Typography>
+                <form style={{ display: "flex", alignItems: "center", flexDirection: 'column', width: '100%' }}>
+                    <CustomTextField fullWidth label='Email' value={email} onChange={(event) => setEmail(event.target.value)} />
+                    <CustomTextField fullWidth label='Senha' type='password' value={senha} onChange={(event) => setSenha(event.target.value)} />
+                    <CustomButton variant='contained' color='primary' onClick={click} style={{ marginTop: '20px' }}>Login</CustomButton>
+                </form>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    message={message}
+                    action={action}
+                />
+            </FormContainer>
+        </Container>
     );
 }

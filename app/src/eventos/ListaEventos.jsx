@@ -5,10 +5,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { NavBar } from '../common/navbar';
 import { styled } from '@mui/material/styles';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 const Container = styled('div')({
-    minHeight: '100%', // Ensure the container takes the full viewport height
-    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)', // Lighter blue gradient background
+    minHeight: '100%',
+    background: 'linear-gradient(to right, #6fb3d2, #a1c4fd)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -17,12 +21,12 @@ const Container = styled('div')({
 });
 
 const ContentContainer = styled(Box)(({ theme }) => ({
-    background: 'rgba(255, 255, 255, 0.6)', // Fundo branco ligeiramente transparente
+    background: 'rgba(255, 255, 255, 0.6)',
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
-    width: '100%', // Ocupar toda a largura disponível
+    width: '100%',
     [theme.breakpoints.up('lg')]: {
-        width: '50%', // 50% de largura em dispositivos grandes
+        width: '50%',
     },
 }));
 
@@ -30,26 +34,27 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: '16px',
     textAlign: 'center',
     borderRadius: '16px',
-    boxShadow: 'none', // Remover sombra
+    boxShadow: 'none',
 }));
 
 const CustomButton = styled(Button)(({ theme }) => ({
-    borderRadius: '12px', // Arredonda os botões
+    fontWeight: 'bold',
+    borderRadius: '12px',
     '&.MuiButton-containedPrimary': {
-        backgroundColor: '#4f8cff', // Cor personalizada para botões azuis
+        backgroundColor: '#4f8cff',
         '&:hover': {
-            backgroundColor: '#3b7adf', // Tom mais escuro ao passar o mouse
+            backgroundColor: '#3b7adf',
         },
     },
     '&.MuiButton-containedError': {
-        backgroundColor: '#ff4949', // Cor personalizada para botão de excluir
+        backgroundColor: '#ff4949',
         '&:hover': {
-            backgroundColor: '#e63939', // Tom mais escuro ao passar o mouse
+            backgroundColor: '#e63939',
         },
     },
     [theme.breakpoints.up('lg')]: {
-        width: '250px', // Largura maior em dispositivos grandes
-        height: '60px', // Altura maior em dispositivos grandes
+        width: '250px',
+        height: '60px',
     },
 }));
 
@@ -60,21 +65,15 @@ export function ListaEventos() {
     const [message, setMessage] = useState("");
     const token = localStorage.getItem('jwtToken');
 
-    const [id, setId] = useState();
-
     useEffect(() => {
         load();
     }, []);
 
     async function load() {
-        
         let id = await fetch(`http://localhost:8080/id/${token}`, {
             method: 'GET',
-        }).then(response => {
-            return response.text();
-        }).then(id => {
-            return id;
-        }).catch(response => {
+        }).then(response => response.text())
+        .catch(response => {
             alert('Erro ao listar eventos!');
             alert(response.status);
         });
@@ -84,10 +83,14 @@ export function ListaEventos() {
             headers: {
                 'Authorization': token,
             }
-        }).then(response => {
-            return response.json();
-        }).then(data => {
-            setData(data);
+        }).then(response => response.json())
+        .then(data => {
+            const sortedData = data.sort((a, b) => {
+                const dateA = dayjs(a.data, 'DD/MM/YYYY');
+                const dateB = dayjs(b.data, 'DD/MM/YYYY');
+                return dateA - dateB;
+            });
+            setData(sortedData);
         }).catch(response => {
             alert('Erro ao listar eventos!');
             alert(response.status);
@@ -97,12 +100,10 @@ export function ListaEventos() {
     function deleteEvento(id) {
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'DELETE',
-
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token,
             }
-
         }).then(response => {
             if (!response.ok) throw new Error('Erro ao deletar evento!');
             setOpen(true);
@@ -127,17 +128,17 @@ export function ListaEventos() {
                         </Grid>
                     </Grid>
 
-                    <Typography align='center' variant="h4" style={{ margin: '10px', color: 'black' }}>Meus eventos</Typography>
+                    <Typography align='center' variant="h4" style={{ margin: '10px 0px 20px 0px', color: 'black', fontWeight: 'bold'}}>Meus eventos</Typography>
 
                     <Grid container direction="column" alignItems="center" spacing={3}>
                         {data.map((evento) => (
                             <Grid item key={evento.id} style={{ width: '100%' }}>
                                 <StyledPaper elevation={0}>
-                                    <Typography variant="h5">{evento.nome}</Typography> {/* Aumenta o tamanho do nome */}
-                                    <Typography variant="body2">{new Date(evento.data).toLocaleDateString()}</Typography>
+                                    <Typography variant="h5" style={{fontWeight: 'bold'}}>{evento.nome}</Typography>
+                                    <Typography variant="body2">{evento.data}</Typography>
                                     <Box mt={2} display="flex" justifyContent="space-around">
-                                        <CustomButton variant="contained" color="primary" onClick={() => navigate(`/editaeventos/${evento.id}`)}>Editar</CustomButton> {/* Usa o botão personalizado */}
-                                        <CustomButton variant="contained" color="error" onClick={() => deleteEvento(evento.id)}>Excluir</CustomButton> {/* Usa o botão personalizado */}
+                                        <CustomButton variant="contained" color="primary" onClick={() => navigate(`/editaeventos/${evento.id}`)}>Editar</CustomButton>
+                                        <CustomButton variant="contained" color="error" onClick={() => deleteEvento(evento.id)}>Excluir</CustomButton>
                                     </Box>
                                 </StyledPaper>
                             </Grid>
@@ -150,9 +151,10 @@ export function ListaEventos() {
                             sx={{ 
                                 margin: '10px', 
                                 borderRadius: '16px', 
-                                width: { xs: '200px', lg: '250px' }, // Largura maior em dispositivos grandes
-                                height: { xs: '50px', lg: '60px' }, // Altura maior em dispositivos grandes
+                                width: { xs: '200px', lg: '250px' }, 
+                                height: { xs: '50px', lg: '60px' },
                                 backgroundColor: '#4f8cff', 
+                                fontWeight: 'bold',
                                 '&:hover': { backgroundColor: '#3b7adf' } 
                             }} 
                             endIcon={<AddIcon />}
