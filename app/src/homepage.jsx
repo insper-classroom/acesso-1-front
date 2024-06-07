@@ -43,6 +43,16 @@ const ActionButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      console.error('Token não encontrado. Faça login novamente.');
+      return navigate('/login');
+    }
+
+    const handleTooltipClose = () => {
+        setShowCopiedTooltip(false);
+    };
+
 const LinkContainer = styled(Paper)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',

@@ -58,30 +58,51 @@ export function ListaEventos() {
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const token = localStorage.getItem('jwtToken');
+
+    const [id, setId] = useState();
 
     useEffect(() => {
         load();
     }, []);
 
-    function load() {
-        fetch('http://localhost:8080/evento', {
-            method: 'GET'
-        }).then(response => response.json())
-            .then(data => {
-                // Ordena os eventos pela data
-                const sortedData = data.sort((a, b) => new Date(a.data) - new Date(b.data));
-                setData(sortedData);
-            })
-            .catch(response => {
-                alert('Erro ao listar eventos!');
-                alert(response.status);
-            });
+    async function load() {
+        
+        let id = await fetch(`http://localhost:8080/id/${token}`, {
+            method: 'GET',
+        }).then(response => {
+            return response.text();
+        }).then(id => {
+            return id;
+        }).catch(response => {
+            alert('Erro ao listar eventos!');
+            alert(response.status);
+        });
+
+        fetch(`http://localhost:8080/eventos/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': token,
+            }
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            setData(data);
+        }).catch(response => {
+            alert('Erro ao listar eventos!');
+            alert(response.status);
+        });
     }
 
     function deleteEvento(id) {
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+            }
+
         }).then(response => {
             if (!response.ok) throw new Error('Erro ao deletar evento!');
             setOpen(true);

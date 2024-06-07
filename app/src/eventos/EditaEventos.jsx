@@ -33,6 +33,8 @@ export function EditaEventos() {
         setOpen(false);
     };
 
+    const token = localStorage.getItem('jwtToken');
+
     const action = (
         <Fragment>
             <Button color="secondary" size="small" onClick={handleClose}>
@@ -47,6 +49,7 @@ export function EditaEventos() {
             </IconButton>
         </Fragment>
     );
+
 
     const formatDateToString = (date) => {
         if (!date) return '';
@@ -89,7 +92,10 @@ export function EditaEventos() {
 
     function load() {
         fetch(`http://localhost:8080/evento/${id}`, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': token,
+            }
         }).then(response => {
             return response.json();
         }).then(data => {
@@ -126,13 +132,12 @@ export function EditaEventos() {
             "linkEvento": linkEvento
         }
 
-        console.log("oi");
-
         fetch(`http://localhost:8080/evento/${id}`, {
             method: 'PUT',
             body: JSON.stringify(dataEditada),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token,
             }
         }).then(response => {
             if (!response.ok) {
