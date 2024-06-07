@@ -83,6 +83,7 @@ export function NavBar() {
                             <MenuItem onClick={() => handleNavigation('/')}>Home</MenuItem>
                             <MenuItem onClick={() => handleNavigation('/eventos')}>Meus Eventos</MenuItem>
                             <MenuItem onClick={() => handleNavigation('/cadastraeventos')}>Novo Evento</MenuItem>
+                            <MenuItem onClick={logout}>Logout</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>

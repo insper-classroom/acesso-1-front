@@ -94,7 +94,7 @@ export function Home() {
 
   const generateSignUpLink = async () => {
     try {
-      const response = await fetch('http://localhost:8080/signup');
+      const response = await fetch('https://api.helipaeventos.com.br/signup');
       if (!response.ok) {
         throw new Error('Failed to fetch signup link');
       }

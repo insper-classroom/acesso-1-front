@@ -107,7 +107,7 @@ export function CadastraUser() {
         };
 
         // Envio dos dados para o backend
-        fetch(`http://localhost:8080/user/${token}`, {
+        fetch(`https://api.helipaeventos.com.br/user/${token}`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
