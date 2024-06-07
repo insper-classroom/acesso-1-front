@@ -100,7 +100,7 @@ export function Home() {
       }
       const link = await response.text();
       const token = link.split('/').pop();
-      const frontendLink = `http://localhost:5173/cadastrausuarios/${token}`;
+      const frontendLink = `https://api.helipaeventos.com.br/cadastrausuarios/${token}`;
       setSignupLink(frontendLink);
     } catch (error) {
       console.error(error);
